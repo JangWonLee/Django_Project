@@ -1,0 +1,83 @@
+{% load staticfiles %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="">
+<meta name="author" content="">
+
+<!-- Bootstrap core CSS -->
+<link rel="stylesheet" type="text/css"
+	href="{% static 'bootstrap/css/bootstrap.css' %} " />
+<link rel="stylesheet" type="text/css"
+	href="{% static 'bootstrap/css/bootstrap-theme.css' %} " />
+
+<!-- <link rel="stylesheet" type="text/css" -->
+<!-- 	href="{% static 'bootstrap/custom/jumbotron-narrow.css' %} " /> -->
+
+<!--[if lt IE 9]>
+	<script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+	<![endif]-->
+<script
+	src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+
+<!-- jQuery (부트스트랩의 자바스크립트 플러그인을 위해 필요한) -->
+<script src="//code.jquery.com/jquery.js"></script>
+
+<script src="{% static 'bootstrap/js/bootstrap.js' %}"></script>
+
+
+
+<title>{% block title %}TP_NEWS{% endblock %}</title>
+</head>
+
+<body>
+	<div>
+		<div class="navbar navbar-inverse navbar-fixed-top">
+			<div class="container">
+				<div class="navbar-header">
+					<button type="button" class="navbar-toggle" data-toggle="collapse"
+						data-target=".navbar-collapse">
+						<span class="icon-bar"></span> <span class="icon-bar"></span> <span
+							class="icon-bar"></span>
+					</button>
+				</div>
+				<div class="navbar-collapse collapse">
+					<ul class="nav navbar-nav">
+						<li class="active"><a
+							style="color: aqua; font-weight: bolder;" class="navbar-brand"
+							href="{% url 'mynews:index' %}">TP News</a></li>
+						<li><a href="{% url 'mynews:index' %}">Today News</a></li>
+						<li><a href="{% url 'mynews:prev' %}">Archive</a></li>
+						<li><a href="#">My</a></li>
+					</ul>
+					{% if user.is_authenticated %}
+					<div align="right" style="color: aqua; font-weight: bolder;">Welcome {{ user.username }}</div>
+					<form method="post" action="{% url 'mynews:user_logout' %}">
+					{% csrf_token %}
+						<button type="submit" value="Login" class="btn btn-success">Log out</button>
+					</form>
+					{% else %}
+					<div class="navbar-form navbar-right">
+						<a href="{% url 'mynews:login_view' %}"><button type="button"
+								class="btn btn-info">Log in</button></a>
+					</div>
+					{% endif %}
+				</div>
+				<!--/.navbar-collapse -->
+			</div>
+		</div>
+		<div class="jumbotron">{% block jumbotron %}{% endblock %}</div>
+		<div class="container">{% block content %}{% endblock %}</div>
+
+		<div class="container">
+			<footer class="footer">
+				{% block footer %}
+				<p>&copy; TP Partners</p>
+				{% endblock %}
+			</footer>
+		</div>
+	</div>
+</body>

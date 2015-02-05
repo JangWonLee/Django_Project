@@ -1,0 +1,34 @@
+{% extends "mynews/base.html" %} {% block title %}TP_NEWS{% endblock %}
+
+
+{% block content %} {% autoescape on %}
+<div>
+	<div align="right">{{news.pub_date}}</div>
+	<br />
+	<table class="table">
+		<tr>
+			<th style="font-size: x-large;">{{ news.title_text }}</th>
+		</tr>
+		<tr>
+			<td style="font-style: italic;">{{ news.summary_text|linebreaks
+				}}</td>
+		</tr>
+		<tr>
+			<td>{{ news.opinion_text }}</td>
+		</tr>
+		<tr>
+			<td><a href="{{news.link_text}}">{{ news.link_text }}</a></td>
+		</tr>
+	</table>
+</div>
+{% endautoescape %} {% if error_message %}
+<p>
+	<strong>{{ error_message }}</strong>
+</p>
+
+
+
+
+
+
+{% endif %} {% endblock %}
