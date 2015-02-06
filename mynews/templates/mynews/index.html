@@ -1,59 +1,29 @@
-{% extends "mynews/base.html" %} 
+{% extends "mynews/base.html" %}
 {% block title %}TP_NEWS{% endblock %}
-
-{% block jumbotron %}
-{% endblock %}
-
-
 {% block content %}
-<div>
-		<header>
-			<h1>Activities</h1>
-		</header><br />
-		
-		{% if activity_list %}
+
+<div class="col-md-2"></div>
+<div class="col-md-8">
+	<header>
+		<h1>Activities</h1>
+	</header>
+	
+	<br />
+	 
+	{% if activity_list %}
+	 
 		{% for activity in activity_list %}
 		<div class="panel panel-default">
-		  <div class="panel-body">
-			{% if activity.tag == '1' %}
-			{{activity.publisher_text}} 
-			{% endif %}
-		  </div>
-		  <div class="panel-footer">
-		  	{{activity.comment_text}}
-		  </div>
+			<div class="panel-body">
+				{% if activity.tag == '1' %}
+					{{activity.publisher_text}} 
+				{% endif %}
+			</div>
+			<div class="panel-footer">{{activity.comment_text}}</div>
 		</div>
 		{% endfor %}
-		{% endif %}
 		
-		
-<!-- 		{% if daily_news_list %} -->
-<!-- 		<table cellspacing="0" cellpadding="0" class="table table-striped" > -->
-<!-- 			<thead> -->
-<!-- 				<tr> -->
-<!-- 					<th scope="col" style="width: 65%">Title</th> -->
-<!-- 					<th scope="col" style="width: 25%">Reg.date</th> -->
-<!-- 					<th scope="col" style="width: 10%">Comments</th> -->
-<!-- 				</tr> -->
-<!-- 			</thead> -->
-<!-- 			<tbody> -->
-<!-- 			<!-- 모든뉴스 --> -->
-<!-- 			{% for news in daily_news_list %} -->
-<!-- 				<tr> -->
-<!-- 					<td scope="row"><a href="{% url 'mynews:detail' news.id %}">{{ news.title_text }}</a></td> -->
-<!-- 					<td>{{news.pub_date}}</td> -->
-<!-- 					<td>Not yet..</td> -->
-<!-- 				</tr> -->
-<!-- 			{% endfor %} -->
-<!-- 			</tbody> -->
-<!-- 			<tfoot> -->
-<!-- 				페이지네이션 -->
-<!-- 			</tfoot> -->
-<!-- 		</table> -->
-<!-- 		{% else %} -->
-<!-- 			<p>No News. Something wrong..</p> -->
-<!-- 		{% endif %} -->
-
+	{% endif %}
 </div>
 
 {% endblock %}

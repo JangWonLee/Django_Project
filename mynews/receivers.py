@@ -16,8 +16,3 @@ def comments_receiver(sender, **kwargs):
     
     a = Activities(publisher_text=publisher_text, title_text=title_text, pub_date=pub_date, comment_text=comment_text, tag=tag)
     a.save()
-    
-    activity_list = Activities.objects.all().order_by('-pub_date')
-    
-    return render_to_response('mynews/index.html',{'activity_list': activity_list})
-    #return render_to_response('mynews/index.html', {'publisher_text': publisher_text, 'title_text': title_text, 'pub_date': pub_date} )

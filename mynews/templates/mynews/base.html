@@ -9,20 +9,23 @@
 <meta name="author" content="">
 
 <!-- Bootstrap core CSS -->
+<script type="text/javascript" src="{% static 'bootstrap/js/jquery-1.11.2.min.js' %}"></script>
 <link rel="stylesheet" type="text/css" href="{% static 'bootstrap/css/bootstrap.css' %} " />
 <link rel="stylesheet" type="text/css" href="{% static 'bootstrap/css/bootstrap-theme.css' %} " />
 <script src="{% static 'bootstrap/js/bootstrap.js' %}"></script>
 
 <!-- Custom styles for this template -->
-<link href="{% static 'bootstrap/custom/sticky-footer-navbar.css' %}" rel="stylesheet">
+<link href="{% static 'mynews/css/sticky-footer-navbar.css' %}" rel="stylesheet">
+<link href="{% static 'mynews/css/style.css' %}" rel="stylesheet">
+
 
 <!--[if lt IE 9]>
 	<script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
 	<![endif]-->
-<script	src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+<!-- <script	src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script> -->
 
 <!-- jQuery (부트스트랩의 자바스크립트 플러그인을 위해 필요한) -->
-<script src="//code.jquery.com/jquery.js"></script>
+<!-- <script src="//code.jquery.com/jquery-1.11.2.min.js"></script> -->
 
 <!-- font -->
 <link href="http://fonts.googleapis.com/css?family=Open+Sans:400,300,700|Merriweather:400,400italic,700italic" rel="stylesheet" type="text/css"/>
@@ -36,6 +39,15 @@
 
 <title>{% block title %}TP_NEWS{% endblock %}</title>
 </head>
+
+<!-- end of head -->
+
+
+
+
+
+
+
 
 <body>
 	<div id="wrap">
@@ -72,16 +84,14 @@
 			</div>
 		</header>
 			
-		<div class="jumbotron">{% block jumbotron %}{% endblock %}</div>
+<!-- 		<div class="jumbotron">{% block jumbotron %}{% endblock %}</div> -->
 			
 		<div class="container">
-			<div class="row">
-				<div class="col-md-8">
-					{% block content %}{% endblock %}
-				</div>
-				<div class="col-md-4">
-					{% block aside %}{% endblock %}
-				</div>
+		<br />
+		<br />
+		<br />
+			<div>
+				{% block content %}{% endblock %}
 			</div>
 		</div>
 	</div>

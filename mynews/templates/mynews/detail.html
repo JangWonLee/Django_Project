@@ -1,6 +1,9 @@
 {% extends "mynews/base.html" %} {% block title %}TP_NEWS{% endblock %}
 
 {% block content %}
+
+<div class="col-md-2"></div>
+<div class="col-md-8">
 	{% autoescape on %}
 	<div>
 		<div align="right">{{news.pub_date}}</div>
@@ -8,18 +11,18 @@
 		<table class="table table-condensed">
 			<thead>
 				<tr>
-					<th style="font-size: x-large;">{{ news.title_text }}</th>
+					<th class="news-title" style="font-size: x-large;">{{ news.title_text }}</th>
 				</tr>
 				<tr>
-					<td style="font-style: italic;">{{ news.summary_text|linebreaks}}</td>
+					<td class="news-summary">{{ news.summary_text|linebreaks}}</td>
 				</tr>
 			</thead>
 			<tbody>
 				<tr>
-					<td>{{ news.opinion_text }}</td>
+					<td class="news-opinion">{{ news.opinion_text }}</td>
 				</tr>
 				<tr>
-					<td><a href="{{news.link_text}}">{{ news.link_text }}</a></td>
+					<td class="news-link"><a href="{{news.link_text}}">{{ news.link_text }}</a></td>
 				</tr>
 			</tbody>
 		</table>
@@ -32,18 +35,13 @@
 	</p>
 	{% endif %}
 	
-	<div>
-		<form method="post">
-		{% csrf_token %}
-			<div class="input-group">
-				<textarea class="form-control" rows="3" placeholder="Comment" id="comment_text", name="comment_text"></textarea>
-				<button type="submit" class="btn btn-default" >Post Your Comment</button>
-			</div>
-		</form>
-	</div>
-{% endblock %}
+	<br />
+	<br />
+	<br />
+	<p> {{comment_list_count}} Comments.</p>
+	<hr>
 
-{% block aside %}
+	
 	{% if comment_list %}
 		{% for comment in comment_list %}
 		<div class="panel panel-default">
@@ -55,6 +53,21 @@
 		</div>
 		{% endfor %}
 	{% endif %}
+	
+	<div>
+	<br />
+		<form method="post">
+		{% csrf_token %}
+			<div class="input-group">
+				<textarea class="form-control" rows="3" placeholder="Comment" id="comment_text", name="comment_text"></textarea>
+				<button type="submit" class="btn btn-default" >Post Your Comment</button>
+			</div>
+		</form>
+	</div>
+</div>
+{% endblock %}
+
+{% block aside %}
 {% endblock %}
 
 	

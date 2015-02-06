@@ -6,7 +6,7 @@ html * {
 
 html,body {
 	font-size: 100%;
-	font-family: "Open Sans", helvetica, arial, sans-serif;
+	font-family: "Open Sans", helvetica, arial, sans-serif, Dotum, "돋움";
 	color: #404040;
 	background-color: white;
 	position: relative;
@@ -1154,6 +1154,7 @@ address {
 	text-decoration: none;
 	border-color: #FFF;
 }
+
 /* ------------------------------ Footer -------------------------- */
 
 footer {

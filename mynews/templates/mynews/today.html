@@ -1,7 +1,5 @@
-{% extends "mynews/base.html" %} 
-{% block title %}TP_NEWS{% endblock %}
-
-{% block jumbotron %}
+ {% extends "mynews/base.html" %} {% block title %}TP_NEWS{% endblock %}
+<!--  {% block jumbotron %} -->
 <!-- 	{% if spot_price %} -->
 <!-- 	<div class="container"> -->
 <!-- 		<small> -->
@@ -11,41 +9,87 @@
 <!-- 		</small> -->
 <!-- 	</div> -->
 <!-- 	{% endif %} -->
-{% endblock %}
-
-
+<!-- {% endblock %}  -->
 {% block content %}
-<div>
-		<header>
-			<h1>Today News</h1>
-		</header><br />
-		{% if daily_news_list %}
-		<table cellspacing="0" cellpadding="0" class="table table-striped" >
-			<thead>
-				<tr>
-					<th scope="col" style="width: 65%">Title</th>
-					<th scope="col" style="width: 25%">Reg.date</th>
-					<th scope="col" style="width: 10%">Comments</th>
-				</tr>
-			</thead>
-			<tbody>
-			<!-- 모든뉴스 -->
+<div class="col-md-2"></div>
+<div class="col-md-8">
+	<header>
+		<h1>Today News</h1>
+	</header>
+	<br /> {% if daily_news_list %}
+	<table cellspacing="0" cellpadding="0" class="table">
+		<thead>
+			<tr>
+				<th scope="col" style="width: 65%">Title</th>
+				<th scope="col" style="width: 25%">Reg.date</th>
+				<th scope="col" style="width: 10%">Comments</th>
+			</tr>
+		</thead>
+	</table>
+
+	<div class="bs-example" data-example-id="collapse-accordion">
+		<div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
+
 			{% for news in daily_news_list %}
-				<tr>
-					<td scope="row"><a href="{% url 'mynews:detail' news.id %}">{{ news.title_text }}</a></td>
-					<td>{{news.pub_date}}</td>
-					<td>Not yet..</td>
-				</tr>
+			
+			
+			<div class="panel panel-default">
+				<div class="panel-heading" role="tab" id="headingOne">
+					<div class="panel-title">
+						<div align="right" style="font-size: small;"> {{news.pub_date}} </div>
+						<div>
+							<a class="news-title" data-toggle="collapse" data-parent="#accordion" href="#{{news.id}}" aria-expanded="true" aria-controls="collapseOne" class="kor">{{ news.title_text }}</a>
+							<a class="news-summary" data-toggle="collapse" data-parent="#accordion" href="#{{news.id}}" aria-expanded="true" aria-controls="collapseOne" class="kor">{{ news.summary_text|linebreaks}}</a>
+						</div>
+						<div class="news-opinion"> {{ news.opinion_text }} </div>
+						<div class="news-link"> <a href="{{news.link_text}}">{{ news.link_text }}</a> </div>
+					</div>
+				</div>
+				<div id="{{news.id}}" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingOne">
+					<div class="panel-body">
+						
+						{% for comment in comment_list %}
+							{% if comment.news == news %}
+							<div class="panel panel-default">
+								<div class="panel-body" style="margin-left: 10px; margin-right: 10px">
+									<div style="color: navy; font-weight: bold;">{{comment.publisher_text}}</div>
+									<div>{{comment.comment_text}}</div>
+									<div style="font-size: x-small;;">{{comment.pub_date}}</div>
+								</div>
+							</div>
+							{% endif %}
+						{% endfor %}
+					
+						<div>
+						<br />
+							<form method="post">
+							{% csrf_token %}
+								<div class="input-group">
+									<textarea class="form-control" rows="3" placeholder="Comment" id="comment_text", name="comment_text"></textarea>
+									<button type="submit" class="btn btn-default" >Post Your Comment</button>
+									<input type=hidden name="news" value="{{news.id}}">
+								</div>
+							</form>
+						</div>
+					</div>
+				</div>
+			</div>
 			{% endfor %}
-			</tbody>
-			<tfoot>
-				<!-- 페이지네이션 -->
-			</tfoot>
-		</table>
-		{% else %}
-			<p>No News. Something wrong..</p>
-		{% endif %}
+
+		</div>
+	</div>
+	<!-- /example -->
+
+	{% else %}
+	<p>No News yet..</p>
+	{% endif %}
 
 </div>
 
 {% endblock %}
+
+<script>
+	$(function() {
+		$("#accordion").accordion();
+	});
+</script>
