@@ -2,34 +2,28 @@
 
 
 {% block content %}
-
-
-
-
-<div class="panel panel-default">
-	<div class="panel-heading">
-		<h3 class="panel-title">Log in</h3>
-	</div>
-	<div class="panel-body" style="margin-left: 10px; margin-right: 10px">
-											  
-		<form class="form-horizontal" method="post">
-		{% csrf_token %}
-			<div class="form-group">
-				<label for="username">Your ID</label> 
-				<input type="text" class="form-control" id="username" placeholder="ID" value="{{username}}" name="username">
+<div class="row">
+	<div class="col-md-6"></div>
+	<div class="col-md-6">
+		<div class="panel panel-default">
+			<div class="panel-heading">
+				<h3 class="panel-title">Log in</h3>
 			</div>
-			<div class="form-group">
-				<label for="password">Password</label>
-				<input type="password" class="form-control" id="password" placeholder="Password" value="{{password}}" name="password">
+			<div class="panel-body" style="margin-left: 10px; margin-right: 10px">
+				<form class="form-horizontal" method="post">
+				{% csrf_token %}
+					<div class="form-group">
+						<label for="username">Your ID</label> 
+						<input type="text" class="form-control" id="username" placeholder="ID" value="{{username}}" name="username">
+					</div>
+					<div class="form-group">
+						<label for="password">Password</label>
+						<input type="password" class="form-control" id="password" placeholder="Password" value="{{password}}" name="password">
+					</div>
+					<button type="submit" value="Login" class="btn btn-success">Log me in!</button>
+				</form>
 			</div>
-			<button type="submit" value="Login" class="btn btn-success">Log me in!</button>
-		</form>
+		</div>
 	</div>
 </div>
-
-
-
-
-
-
 {% endblock %}

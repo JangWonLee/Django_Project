@@ -1,12 +1,25 @@
 {% extends "mynews/base.html" %} 
 {% block title %}TP_NEWS{% endblock %}
 
+{% block jumbotron %}
+<!-- 	{% if spot_price %} -->
+<!-- 	<div class="container"> -->
+<!-- 		<small> -->
+<!-- 			<div><small><i>{{spot_price.closedday_text}}</i></small></div> -->
+<!-- 			<div><small>{{spot_price.henryhub_text}} </small></div> -->
+<!-- 			<div><small>{{spot_price.wticushing_text}} </small></div> -->
+<!-- 		</small> -->
+<!-- 	</div> -->
+<!-- 	{% endif %} -->
+{% endblock %}
+
+
 {% block content %}
 <div>
 		<header>
-			<h1>Archive</h1>
+			<h1>Today News</h1>
 		</header><br />
-		{% if previous_news %}
+		{% if daily_news_list %}
 		<table cellspacing="0" cellpadding="0" class="table table-striped" >
 			<thead>
 				<tr>
@@ -15,10 +28,9 @@
 					<th scope="col" style="width: 10%">Comments</th>
 				</tr>
 			</thead>
-			
 			<tbody>
 			<!-- 모든뉴스 -->
-			{% for news in previous_news %}
+			{% for news in daily_news_list %}
 				<tr>
 					<td scope="row"><a href="{% url 'mynews:detail' news.id %}">{{ news.title_text }}</a></td>
 					<td>{{news.pub_date}}</td>
@@ -26,24 +38,8 @@
 				</tr>
 			{% endfor %}
 			</tbody>
-			
 			<tfoot>
 				<!-- 페이지네이션 -->
-				<div class="pagination">
-				    <span class="step-links">
-				        {% if previous_news.has_previous %}
-				            <a href="?page={{ previous_news.previous_page_number }}">previous</a>
-				        {% endif %}
-				
-				        <span class="current">
-				            Page {{ previous_news.number }} of {{ news.paginator.num_pages }}.
-				        </span>
-				
-				        {% if previous_news.has_next %}
-				            <a href="?page={{ previous_news.next_page_number }}">next</a>
-				        {% endif %}
-				    </span>
-				</div>
 			</tfoot>
 		</table>
 		{% else %}
@@ -51,4 +47,5 @@
 		{% endif %}
 
 </div>
+
 {% endblock %}

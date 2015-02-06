@@ -1,34 +1,61 @@
 {% extends "mynews/base.html" %} {% block title %}TP_NEWS{% endblock %}
 
+{% block content %}
+	{% autoescape on %}
+	<div>
+		<div align="right">{{news.pub_date}}</div>
+		<br />
+		<table class="table table-condensed">
+			<thead>
+				<tr>
+					<th style="font-size: x-large;">{{ news.title_text }}</th>
+				</tr>
+				<tr>
+					<td style="font-style: italic;">{{ news.summary_text|linebreaks}}</td>
+				</tr>
+			</thead>
+			<tbody>
+				<tr>
+					<td>{{ news.opinion_text }}</td>
+				</tr>
+				<tr>
+					<td><a href="{{news.link_text}}">{{ news.link_text }}</a></td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+	{% endautoescape %}
+	
+	{% if error_message %}
+	<p>
+		<strong>{{ error_message }}</strong>
+	</p>
+	{% endif %}
+	
+	<div>
+		<form method="post">
+		{% csrf_token %}
+			<div class="input-group">
+				<textarea class="form-control" rows="3" placeholder="Comment" id="comment_text", name="comment_text"></textarea>
+				<button type="submit" class="btn btn-default" >Post Your Comment</button>
+			</div>
+		</form>
+	</div>
+{% endblock %}
 
-{% block content %} {% autoescape on %}
-<div>
-	<div align="right">{{news.pub_date}}</div>
-	<br />
-	<table class="table">
-		<tr>
-			<th style="font-size: x-large;">{{ news.title_text }}</th>
-		</tr>
-		<tr>
-			<td style="font-style: italic;">{{ news.summary_text|linebreaks
-				}}</td>
-		</tr>
-		<tr>
-			<td>{{ news.opinion_text }}</td>
-		</tr>
-		<tr>
-			<td><a href="{{news.link_text}}">{{ news.link_text }}</a></td>
-		</tr>
-	</table>
-</div>
-{% endautoescape %} {% if error_message %}
-<p>
-	<strong>{{ error_message }}</strong>
-</p>
+{% block aside %}
+	{% if comment_list %}
+		{% for comment in comment_list %}
+		<div class="panel panel-default">
+			<div class="panel-body" style="margin-left: 10px; margin-right: 10px">
+				<div style="color: navy; font-weight: bold;">{{comment.publisher_text}}</div>
+				<div>{{comment.comment_text}}</div>
+				<div style="font-size: x-small;;">{{comment.pub_date}}</div>
+			</div>
+		</div>
+		{% endfor %}
+	{% endif %}
+{% endblock %}
 
-
-
-
-
-
-{% endif %} {% endblock %}
+	
+	

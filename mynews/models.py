@@ -22,7 +22,7 @@ class News(models.Model):
 
 class Comments(models.Model):
     news = models.ForeignKey(News)
-    comment_text = models.CharField(max_length=200)
+    comment_text = models.CharField(max_length=400)
     publisher_text = models.CharField(max_length=200)
     pub_date = models.DateTimeField('date published')
     def __str__(self):
@@ -38,3 +38,15 @@ class Spot(models.Model):
         return self.henryhub_text
         return self.wticushing_text
         return self.closedday_text
+
+class Activities(models.Model):
+    publisher_text = models.CharField(max_length=200) 
+    title_text = models.CharField(max_length=200)
+    comment_text = models.CharField(max_length=400, default='')
+    pub_date = models.DateTimeField('date published')
+    tag = models.CharField(max_length=100, default='')
+    def __str__(self):
+        return self.publisher_text
+        return self.title_text
+        return self.comment_text
+        return self.tag

@@ -1,22 +1,22 @@
-import datetime
-
 from datetime import datetime, timedelta, time
 
 from django.contrib.auth import authenticate, login, logout
-from django.contrib.auth.models import User
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
-from django.core.urlresolvers import reverse
-from django.http import HttpResponseRedirect, HttpResponse
-from django.shortcuts import get_object_or_404, render, render_to_response,\
-    redirect
-from django.template import RequestContext, loader
-from django.utils import timezone
-from django.views import generic
+from django.shortcuts import get_object_or_404, render, redirect
 
-from mynews.models import News, Comments, Spot
+from mynews.models import News, Comments, Spot, Activities
+from mynews import signals
+from mynews.signals import comments_done
 
 
 def index(request):
+    print("index call")
+    
+    activity_list = Activities.objects.all().order_by('-pub_date')
+    
+    return render(request, 'mynews/index.html', {'activity_list': activity_list})
+
+def today(request):
     today = datetime.now().date()
     tomorrow = today + timedelta(1)
     today_start = datetime.combine(today, time())
@@ -26,11 +26,32 @@ def index(request):
     spot_price_list = Spot.objects.filter(pub_date__lte=today_end, pub_date__gte=today_start)
     spot_price = spot_price_list.first()
     context = {'daily_news_list': daily_news_list, 'spot_price': spot_price }
-    return render(request, 'mynews/index.html', context)
+    return render(request, 'mynews/today.html', context)
 
 def detail(request, news_id):
-    news = get_object_or_404(News, pk=news_id)
-    return render(request, 'mynews/detail.html', {'news': news})
+    print("detail call")
+    if request.method == 'POST':
+        news = get_object_or_404(News, pk=news_id)
+        comment_text = request.POST.get("comment_text", False)
+        publisher_text = request.user.username
+        pub_date = datetime.now()
+        
+        #signal / tag 1 = commnet
+        comments_done.send(sender=None, publisher_text=publisher_text, title_text=news.title_text, pub_date=pub_date, comment_text=comment_text, tag='1')
+        #db 객체만듬
+        c = Comments(news=news, comment_text=comment_text, publisher_text=publisher_text, pub_date=pub_date)
+        c.save()
+        
+        comment_list = Comments.objects.filter(news=news)
+        print(comment_list) 
+        
+        return render(request, 'mynews/detail.html', {'news': news, 'comment_list':comment_list})
+    else:
+        news = get_object_or_404(News, pk=news_id)
+        comment_list = Comments.objects.filter(news=news)
+        print(comment_list) 
+        return render(request, 'mynews/detail.html', {'news': news, 'comment_list':comment_list})
+    
 
 def prev(request):
     previous_news_list = News.objects.order_by('-pub_date')[:]

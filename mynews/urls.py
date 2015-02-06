@@ -1,10 +1,10 @@
 from django.conf.urls import patterns, url
 
-from mynews import views
-
+from mynews import views, receivers
 
 urlpatterns = patterns('',
     url(r'^$', views.index, name='index'),
+    url(r'^today/$', views.today, name='today'),
     url(r'^(?P<news_id>\d+)/$', views.detail, name='detail'),
     url(r'^prev/$',  views.prev, name='prev' ),
     url(r'^login/$', views.login_view, name='login_view'),
