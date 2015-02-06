@@ -25,13 +25,38 @@ def today(request):
     daily_news_list = News.objects.filter(pub_date__lte=today_end, pub_date__gte=today_start)
     spot_price_list = Spot.objects.filter(pub_date__lte=today_end, pub_date__gte=today_start)
     spot_price = spot_price_list.first()
-    context = {'daily_news_list': daily_news_list, 'spot_price': spot_price }
-    return render(request, 'mynews/today.html', context)
+    
+    comment_list = Comments.objects.filter(news=daily_news_list)
+    print(comment_list)
+    
+    #context = {}
+    return render(request, 'mynews/today.html', {'daily_news_list': daily_news_list, 'spot_price': spot_price, 'comment_list': comment_list} )
+
+
+def prev(request):
+    previous_news_list = News.objects.order_by('-pub_date')[:]
+    # context질문, return 방법
+#    context = {'previous_news_list': previous_news_list}
+    
+    paginator = Paginator(previous_news_list, 10)
+    # 질문
+    page = request.GET.get('page')
+    
+    try:
+        previous_news = paginator.page(page)
+    except PageNotAnInteger:
+        previous_news = paginator.page(1)
+    except EmptyPage:
+        previous_news = paginator.page(paginator.num_pages)
+    
+    return render(request, 'mynews/prev.html', {"previous_news": previous_news})
+
 
 def detail(request, news_id):
     print("detail call")
     if request.method == 'POST':
         news = get_object_or_404(News, pk=news_id)
+        
         comment_text = request.POST.get("comment_text", False)
         publisher_text = request.user.username
         pub_date = datetime.now()
@@ -53,23 +78,6 @@ def detail(request, news_id):
         return render(request, 'mynews/detail.html', {'news': news, 'comment_list':comment_list})
     
 
-def prev(request):
-    previous_news_list = News.objects.order_by('-pub_date')[:]
-    # context질문, return 방법
-#    context = {'previous_news_list': previous_news_list}
-    
-    paginator = Paginator(previous_news_list, 10)
-    # 질문
-    page = request.GET.get('page')
-    
-    try:
-        previous_news = paginator.page(page)
-    except PageNotAnInteger:
-        previous_news = paginator.page(1)
-    except EmptyPage:
-        previous_news = paginator.page(paginator.num_pages)
-    
-    return render(request, 'mynews/prev.html', {"previous_news": previous_news})
 
 def login_view(request):
     print(111111111)
