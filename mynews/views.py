@@ -128,3 +128,29 @@ def user_logout(request):
     logout(request)
     return render(request, 'mynews/logout.html')
 
+def comment_delete(request, comment_id):
+    comment = Comments.objects.get(pk=comment_id)
+    print(comment)
+    comment.delete()
+    
+    today = datetime.now().date()
+    tomorrow = today + timedelta(1)
+    today_start = datetime.combine(today, time())
+    today_end = datetime.combine(tomorrow, time())
+    
+    #오늘 News와 Spot price 받아와
+    daily_news_list = News.objects.filter(pub_date__lte=today_end, pub_date__gte=today_start)
+    spot_price_list = Spot.objects.filter(pub_date__lte=today_end, pub_date__gte=today_start)
+    spot_price = spot_price_list.first()
+    
+        
+    #Comments모델 객체 받아와 ( 오늘 News의 Comments들만)
+    comment_list = Comments.objects.filter(news=daily_news_list)
+    comment_list_count = comment_list.count()
+    
+    return render(request, 'mynews/today.html', {'daily_news_list': daily_news_list, 'spot_price': spot_price, 'comment_list': comment_list, 'comment_list_count': comment_list_count} )
+    
+
+def comment_edit(request):
+    return
+

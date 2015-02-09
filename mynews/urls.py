@@ -10,7 +10,8 @@ urlpatterns = patterns('',
     url(r'^archive/$', views.archive, name='archive'),
     url(r'^login/$', views.login_view, name='login_view'),
     url(r'^logout/$', views.user_logout, name='user_logout'),
-    
+    url(r'^(?P<comment_id>\d+)/cdelete/$', views.comment_delete, name='comment_delete'),
+    url(r'^cedit/$', views.comment_edit, name='comment_edit'),
     
 
 #    url(r'^$', views.IndexView.as_view(), name='index'),

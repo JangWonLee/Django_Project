@@ -1,3 +1,41 @@
+<script type="text/javascript">
+
+<!-- // Delete post on click -->
+$("#talk").on('click', 'a[id^=delete-post-]', function(){
+    var post_primary_key = $(this).attr('id').split('-')[2];
+    console.log(post_primary_key) // sanity check
+    delete_post(post_primary_key);
+});
+
+// $("#talk").prepend("<li><strong>"+json.text+"</strong> - <em> "+json.author+"</em> - <span> "+json.created+"</span> - <a id='delete-post-"+json.postpk+"'>delete me</a></li>");
+
+
+function delete_post(post_primary_key){
+    if (confirm('are you sure you want to remove this post?')==true){
+        $.ajax({
+            url : "delete_post/", // the endpoint
+            type : "DELETE", // http method
+            data : { postpk : post_primary_key }, // data sent with the delete request
+            success : function(json) {
+                // hide the post
+              $('#post-'+post_primary_key).hide(); // hide the post on success
+              console.log("post deletion successful");
+            },
+
+            error : function(xhr,errmsg,err) {
+                // Show an error
+                $('#results').html("<div class='alert-box alert radius' data-alert>"+
+                "Oops! We have encountered an error. <a href='#' class='close'>&times;</a></div>"); // add error to the dom
+                console.log(xhr.status + ": " + xhr.responseText); // provide a bit more info about the error to the console
+            }
+        });
+    } else {
+        return false;
+    }
+};
+
+</script>
+
 {% extends "mynews/base.html" %} {% block title %}TP_NEWS{% endblock %}
 
 {% block content %}
@@ -45,7 +83,7 @@
 									<div>{{comment.comment_text|urlize|linebreaks}}</div>
 									<div style="font-size: x-small;;">
 										{{comment.pub_date}}
-										<span class="float-right" style="margin-left: 10px"><a href="#">delete</a></span>
+										<span class="float-right" style="margin-left: 10px"><a href="{% url 'mynews:comment_delete' comment.id %}">delete</a></span>
 										<span class="float-right"><a href="#">edit</a></span>
 									</div>
 								</div>
