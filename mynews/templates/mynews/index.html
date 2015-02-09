@@ -1,29 +1,28 @@
 {% extends "mynews/base.html" %}
 {% block title %}TP_NEWS{% endblock %}
+
 {% block content %}
 
-<div class="col-md-2"></div>
-<div class="col-md-8">
-	<header>
-		<h1>Activities</h1>
-	</header>
+<!-- {% if user.is_authenticated %} -->
+<!-- <div> -->
 	
-	<br />
-	 
-	{% if activity_list %}
-	 
-		{% for activity in activity_list %}
-		<div class="panel panel-default">
-			<div class="panel-body">
-				{% if activity.tag == '1' %}
-					{{activity.publisher_text}} 
-				{% endif %}
+<!-- </div> -->
+
+<!-- {% endif %} -->
+
+<div>
+	<section id="hero" class="light-typo">
+		<div id="cover-image" class="image-bg animated fadeIn"></div>
+		<div class="container welcome-content">
+			<div class="middle-text">
+				<h1>HELLO, <b>TP PARTNERS</b></h1>
+				<h2>
+					Please  <b>Log in</b> first.
+				</h2>
 			</div>
-			<div class="panel-footer">{{activity.comment_text}}</div>
 		</div>
-		{% endfor %}
-		
-	{% endif %}
+	</section>
 </div>
 
 {% endblock %}
+

@@ -1,35 +1,43 @@
 from datetime import datetime, timedelta, time
 
+from django import forms
 from django.contrib.auth import authenticate, login, logout
+from django.core.files.images import get_image_dimensions
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from django.shortcuts import get_object_or_404, render, redirect
 
-from mynews.models import News, Comments, Spot, Activities
 from mynews import signals
+from mynews.models import News, Comments, Spot, Activities, UserProfile
 from mynews.signals import comments_done
 
 
 def index(request):
-    print("index call")
-    
+    return render(request, 'mynews/index.html')
+
+def activity(request):
     activity_list = Activities.objects.all().order_by('-pub_date')
     
-    return render(request, 'mynews/index.html', {'activity_list': activity_list})
+    return render(request, 'mynews/activity.html', {'activity_list': activity_list})
 
 def today(request):
-    print(request)
     
     today = datetime.now().date()
     tomorrow = today + timedelta(1)
     today_start = datetime.combine(today, time())
     today_end = datetime.combine(tomorrow, time())
     
+    #오늘 News와 Spot price 받아와
+    daily_news_list = News.objects.filter(pub_date__lte=today_end, pub_date__gte=today_start)
+    spot_price_list = Spot.objects.filter(pub_date__lte=today_end, pub_date__gte=today_start)
+    spot_price = spot_price_list.first()
     
     if request.method == 'POST':
         comment_text = request.POST.get("comment_text", False)
-        news = request.POST.get("news", False)
         publisher_text = request.user.username
         pub_date = datetime.now()
+        news_id = request.POST.get("news_id", False)
+        
+        news = News.objects.get(pk = news_id)
 
         #signal / tag 1 = commnet
         comments_done.send(sender=None, publisher_text=publisher_text, title_text=news.title_text, pub_date=pub_date, comment_text=comment_text, tag='1')
@@ -42,34 +50,30 @@ def today(request):
         #print(comment_list) 
         
         #return render(request, 'mynews/detail.html', {'news': news, 'comment_list':comment_list})
-    else:
-        #오늘 News와 Spot price 받아와
-        daily_news_list = News.objects.filter(pub_date__lte=today_end, pub_date__gte=today_start)
-        spot_price_list = Spot.objects.filter(pub_date__lte=today_end, pub_date__gte=today_start)
-        spot_price = spot_price_list.first()
         
         #Comments모델 객체 받아와 ( 오늘 News의 Comments들만)
     comment_list = Comments.objects.filter(news=daily_news_list)
+    comment_list_count = comment_list.count()
     
     #context = {}
-    return render(request, 'mynews/today.html', {'daily_news_list': daily_news_list, 'spot_price': spot_price, 'comment_list': comment_list} )
+    return render(request, 'mynews/today.html', {'daily_news_list': daily_news_list, 'spot_price': spot_price, 'comment_list': comment_list, 'comment_list_count': comment_list_count} )
 
 
-def prev(request):
+def archive(request):
     #모든 News 받아와
-    previous_news_list = News.objects.order_by('-pub_date')[:]
+    archive_news_list = News.objects.order_by('-pub_date')[:]
 
     #Pagination
-    paginator = Paginator(previous_news_list, 10)
+    paginator = Paginator(archive_news_list, 10)
     page = request.GET.get('page')
     try:
-        previous_news = paginator.page(page)
+        archive_news = paginator.page(page)
     except PageNotAnInteger:
-        previous_news = paginator.page(1)
+        archive_news = paginator.page(1)
     except EmptyPage:
-        previous_news = paginator.page(paginator.num_pages)
+        archive_news = paginator.page(paginator.num_pages)
     
-    return render(request, 'mynews/prev.html', {"previous_news": previous_news})
+    return render(request, 'mynews/archive.html', {"archive_news": archive_news})
 
 
 def detail(request, news_id):
@@ -101,15 +105,14 @@ def login_view(request):
         print(22222222)
         username = request.POST.get('username', False)
         password = request.POST.get('password', False)
-        print(username)
-        print(password)
         user = authenticate(username=username, password=password)
-        print(user)
         if user is not None and user.is_active:
             if user.is_active:
                 login(request, user)
-                print(11)
-                return redirect('/mynews')     
+                
+                activity_list = Activities.objects.all().order_by('-pub_date')
+                return render(request, 'mynews/activity.html', {'activity_list': activity_list})
+
             else:
                 print(22)
         else:
@@ -124,6 +127,4 @@ def login_view(request):
 def user_logout(request):
     logout(request)
     return render(request, 'mynews/logout.html')
-    
-
 

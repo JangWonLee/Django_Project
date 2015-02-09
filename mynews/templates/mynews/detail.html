@@ -8,24 +8,25 @@
 	<div>
 		<div align="right">{{news.pub_date}}</div>
 		<br />
-		<table class="table table-condensed">
-			<thead>
-				<tr>
-					<th class="news-title" style="font-size: x-large;">{{ news.title_text }}</th>
-				</tr>
-				<tr>
-					<td class="news-summary">{{ news.summary_text|linebreaks}}</td>
-				</tr>
-			</thead>
-			<tbody>
-				<tr>
-					<td class="news-opinion">{{ news.opinion_text }}</td>
-				</tr>
-				<tr>
-					<td class="news-link"><a href="{{news.link_text}}">{{ news.link_text }}</a></td>
-				</tr>
-			</tbody>
-		</table>
+		<h1 class="news-title">{{news.title_text}}</h1>
+		<h4 class="news-summary">{{news.summary_text}}</h3><br />
+		<p class="news-opinion">{{news.opinion_text}}</p>
+		<div class="news-link"><a href="{{news.link_text}}">{{ news.link_text }}</a></div>
+<!-- 					<th class="news-title" style="font-size: x-large;">{{ news.title_text }}</th> -->
+<!-- 				</tr> -->
+<!-- 				<tr> -->
+<!-- 					<td class="news-summary">{{ news.summary_text|linebreaks}}</td> -->
+<!-- 				</tr> -->
+<!-- 			</thead> -->
+<!-- 			<tbody> -->
+<!-- 				<tr> -->
+<!-- 					<td class="news-opinion">{{ news.opinion_text|urlize|linebreaks}}</td> -->
+<!-- 				</tr> -->
+<!-- 				<tr> -->
+<!-- 					<td class="news-link"><a href="{{news.link_text}}">{{ news.link_text }}</a></td> -->
+<!-- 				</tr> -->
+<!-- 			</tbody> -->
+<!-- 		</table> -->
 	</div>
 	{% endautoescape %}
 	
@@ -47,7 +48,7 @@
 		<div class="panel panel-default">
 			<div class="panel-body" style="margin-left: 10px; margin-right: 10px">
 				<div style="color: navy; font-weight: bold;">{{comment.publisher_text}}</div>
-				<div>{{comment.comment_text}}</div>
+				<div>{{comment.comment_text|urlize|linebreaks }}</div>
 				<div style="font-size: x-small;;">{{comment.pub_date}}</div>
 			</div>
 		</div>

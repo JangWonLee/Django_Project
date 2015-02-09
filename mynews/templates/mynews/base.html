@@ -31,7 +31,7 @@
 <link href="http://fonts.googleapis.com/css?family=Open+Sans:400,300,700|Merriweather:400,400italic,700italic" rel="stylesheet" type="text/css"/>
 
 <!-- KeyLime -->
-<link rel="stylesheet" href="{% static 'keylime/css/bootstrap.min.css' %}"/>
+<!-- <link rel="stylesheet" href="{% static 'keylime/css/bootstrap.min.css' %}"/> -->
 <link rel="stylesheet" href="{% static 'keylime/css/style.css' %}"/>
 <link rel="stylesheet" href="{% static 'keylime/css/icons.css' %}"/>
 <link rel="stylesheet" href="{% static 'keylime/css/animate.min.css' %}"/>
@@ -61,19 +61,29 @@
 						</button>
 					</div>
 					<div class="navbar-collapse collapse">
+
+						{% if user.is_authenticated %}
 						<ul class="nav navbar-nav">
-							<li class="active"><a style="color: aqua; font-weight: bolder;" class="navbar-brand" href="{% url 'mynews:index' %}">TP News</a></li>
+							<li class="active"><a style="color: aqua; font-weight: bolder;" class="navbar-brand" href="{% url 'mynews:index' %}">TP Partners</a></li>
 							<li><a href="{% url 'mynews:today' %}">Today News</a></li>
-							<li><a href="{% url 'mynews:prev' %}">Archive</a></li>
+							<li><a href="{% url 'mynews:archive' %}">Archive</a></li>
+							<li><a href="{% url 'mynews:activity' %}">Activity</a></li>
 							<li><a href="#">My</a></li>
 						</ul>
-						{% if user.is_authenticated %}
-						<div align="right" style="color: aqua; font-weight: bolder; font-size: large;">Welcome   {{ user.username }}</div>
+						<div align="right" style="color: aqua; font-weight: bolder; font-size: large;">
+						Welcome   {{ user.username }}
+
 						<form method="post" action="{% url 'mynews:user_logout' %}">
 						{% csrf_token %}
-							<div align="right"><button type="submit" value="Logout" class="btn btn-link" style="color: aqua;">Log out</button></div>
+							<button type="submit" value="Logout" class="btn btn-link" style="color: aqua;">Log out</button>
 						</form>
+						</div>
+						
 						{% else %}
+						<ul class="nav navbar-nav">
+							<li class="active"><a style="color: aqua; font-weight: bolder;" class="navbar-brand" href="{% url 'mynews:index' %}">TP Partners</a></li>
+						</ul>
+						
 						<div class="navbar-form navbar-right">
 							<a href="{% url 'mynews:login_view' %}" class="btn btn-blog outline-white pull-right" >Log in</a>
 						</div>

@@ -1,13 +1,16 @@
 import datetime
 
+from django.contrib.auth.models import User
 from django.db import models
 from django.utils import timezone
+from distutils.command.upload import upload
+
 
 class News(models.Model):
     title_text = models.CharField(max_length=200)
     link_text = models.CharField(max_length=200)
-    summary_text = models.CharField(max_length=200)
-    opinion_text = models.CharField(max_length=400)
+    summary_text = models.CharField(max_length=200, blank=True)
+    opinion_text = models.CharField(max_length=400, blank=True)
     pub_date = models.DateTimeField('date published')
     def __str__(self):              # __unicode__ on Python 2
         return self.title_text
@@ -50,3 +53,9 @@ class Activities(models.Model):
         return self.title_text
         return self.comment_text
         return self.tag
+
+class UserProfile(models.Model):
+    user = models.OneToOneField(User)
+    avatar = models.ImageField(upload_to = 'picture/', default = 'picture/profile-no-img.jpg')
+    
+    

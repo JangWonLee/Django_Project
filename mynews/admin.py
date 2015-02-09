@@ -1,5 +1,5 @@
 from django.contrib import admin
-from mynews.models import News, Comments, Spot, Activities
+from mynews.models import News, Comments, Spot, Activities, UserProfile
 
 class CommentsInline(admin.TabularInline):
     model = Comments

@@ -1,0 +1,29 @@
+{% extends "mynews/base.html" %}
+{% block title %}TP_NEWS{% endblock %}
+{% block content %}
+
+<div class="col-md-2"></div>
+<div class="col-md-8">
+	<header>
+		<h1>Activities</h1>
+	</header>
+	
+	<br />
+	 
+	{% if activity_list %}
+	 
+		{% for activity in activity_list %}
+		<div class="panel panel-default">
+			<div class="panel-body">
+				{% if activity.tag == '1' %}
+					{{activity.publisher_text}} 
+				{% endif %}
+			</div>
+			<div class="panel-footer">{{activity.comment_text}}</div>
+		</div>
+		{% endfor %}
+		
+	{% endif %}
+</div>
+
+{% endblock %}

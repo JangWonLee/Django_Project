@@ -3,13 +3,11 @@
 .news-title {
 	font-family: Arial, Dotum, "돋움", sans-serif;
 	font-weight: bold;
-	font-size: x-large;
 }
 
 .news-summary {
 	font-family: Arial, Dotum, "돋움", sans-serif;
-/* 	font-weight: bold; */
-	font-size: large;
+	font-weight: bold;
 }
 
 .news-opinion {
@@ -21,4 +19,12 @@
 	color: black;
 	font-family: Arial, Dotum, "돋움", sans-serif;
 	font-size: small;
+}
+
+.dotum {
+	font-family: Arial, Dotum, "돋움", sans-serif;
+}
+
+.float-right {
+	float: right;
 }
