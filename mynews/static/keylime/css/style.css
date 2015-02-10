@@ -926,7 +926,8 @@ article .btn {
 	border:none;
 	/* border-radius:5px; */
 	outline:none;
-	height: 44px;
+	height: 60px;
+	width: 100%;
 	font-size:16px;
 	font-weight:400;
 	vertical-align:top;

@@ -22,9 +22,13 @@ class News(models.Model):
     was_published_recently.admin_order_field = 'pub_date'
     was_published_recently.boolean = True
     was_published_recently.short_description = 'Published recently?'
+    
+    @property 
+    def comment_count(self):
+        return self.comments.all().count()
 
 class Comments(models.Model):
-    news = models.ForeignKey(News)
+    news = models.ForeignKey(News, related_name='comments')
     comment_text = models.CharField(max_length=400)
     publisher_text = models.CharField(max_length=200)
     pub_date = models.DateTimeField('date published')

@@ -12,21 +12,6 @@
 		<h4 class="news-summary">{{news.summary_text}}</h3><br />
 		<p class="news-opinion">{{news.opinion_text}}</p>
 		<div class="news-link"><a href="{{news.link_text}}">{{ news.link_text }}</a></div>
-<!-- 					<th class="news-title" style="font-size: x-large;">{{ news.title_text }}</th> -->
-<!-- 				</tr> -->
-<!-- 				<tr> -->
-<!-- 					<td class="news-summary">{{ news.summary_text|linebreaks}}</td> -->
-<!-- 				</tr> -->
-<!-- 			</thead> -->
-<!-- 			<tbody> -->
-<!-- 				<tr> -->
-<!-- 					<td class="news-opinion">{{ news.opinion_text|urlize|linebreaks}}</td> -->
-<!-- 				</tr> -->
-<!-- 				<tr> -->
-<!-- 					<td class="news-link"><a href="{{news.link_text}}">{{ news.link_text }}</a></td> -->
-<!-- 				</tr> -->
-<!-- 			</tbody> -->
-<!-- 		</table> -->
 	</div>
 	{% endautoescape %}
 	
@@ -45,11 +30,20 @@
 	
 	{% if comment_list %}
 		{% for comment in comment_list %}
-		<div class="panel panel-default">
+		<div class="panel panel-default word-break">
 			<div class="panel-body" style="margin-left: 10px; margin-right: 10px">
-				<div style="color: navy; font-weight: bold;">{{comment.publisher_text}}</div>
-				<div>{{comment.comment_text|urlize|linebreaks }}</div>
-				<div style="font-size: x-small;;">{{comment.pub_date}}</div>
+				<div><a class="temp" href="#">temp</a></div>
+				<div>
+					<img src=" {{ STATIC_URL }}picture/{{comment.publisher_text}}.jpg " width="50" height="50"> <span style="color: navy; font-weight: bold;">{{comment.publisher_text}}</span>
+				</div>
+				<div>
+					<div class="comment-text">{{comment.comment_text|urlize|linebreaks}}</div>
+				</div>
+				<div style="font-size: x-small;">
+					{{comment.pub_date}}
+					<span class="float-right" style="margin-left: 10px"><a href="{% url 'mynews:comment_delete' comment.id %}" class="comment-delete">Delete</a></span>
+					<span class="float-right"><a href="#" class="comment-edit" style="font-size: ">Edit</a></span>
+				</div>
 			</div>
 		</div>
 		{% endfor %}
@@ -59,8 +53,8 @@
 	<br />
 		<form method="post">
 		{% csrf_token %}
-			<div class="input-group">
-				<textarea class="form-control" rows="3" placeholder="Comment" id="comment_text", name="comment_text"></textarea>
+			<div>
+				<textarea class="form-control" rows="3" placeholder="Comment" id="comment_text" name="comment_text"></textarea>
 				<button type="submit" class="btn btn-default" >Post Your Comment</button>
 			</div>
 		</form>
@@ -68,8 +62,5 @@
 </div>
 {% endblock %}
 
-{% block aside %}
-{% endblock %}
-
-	
+						
 	

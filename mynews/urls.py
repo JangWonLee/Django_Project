@@ -1,5 +1,5 @@
 from django.conf.urls import patterns, url
-
+from mynews import receivers
 from mynews import views
 
 urlpatterns = patterns('',
@@ -12,6 +12,8 @@ urlpatterns = patterns('',
     url(r'^logout/$', views.user_logout, name='user_logout'),
     url(r'^(?P<comment_id>\d+)/cdelete/$', views.comment_delete, name='comment_delete'),
     url(r'^cedit/$', views.comment_edit, name='comment_edit'),
+    
+    url(r'^delete_post/$', 'delete_post'),
     
 
 #    url(r'^$', views.IndexView.as_view(), name='index'),

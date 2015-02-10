@@ -13,16 +13,25 @@
 	{% if activity_list %}
 	 
 		{% for activity in activity_list %}
-		<div class="panel panel-default">
+		<div class="panel panel-default word-break">
 			<div class="panel-body">
+				<div>
+					<div align="right" style="font-size: x-small;">{{activity.pub_date}}</div>
+					<img src=" {{ STATIC_URL }}picture/{{activity.publisher_text}}.jpg " width="50" height="50"> 
 				{% if activity.tag == '1' %}
-					{{activity.publisher_text}} 
+					<b>{{activity.publisher_text}}</b> commented on "{{activity.title_text}}"
 				{% endif %}
+				{% if activity.tag == '2' %}
+				
+				{% endif %}
+				{% if activity.tag == '3' %}
+				
+				{% endif %}
+				</div>
 			</div>
-			<div class="panel-footer">{{activity.comment_text}}</div>
+			<div class="panel-footer">{{activity.comment_text|urlize|escape|linebreaks}}</div>
 		</div>
 		{% endfor %}
-		
 	{% endif %}
 </div>
 

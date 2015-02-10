@@ -1,11 +1,15 @@
+import json
 from datetime import datetime, timedelta, time
 
 from django import forms
 from django.contrib.auth import authenticate, login, logout
 from django.core.files.images import get_image_dimensions
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
+from django.http.request import QueryDict
+from django.http.response import HttpResponse
 from django.shortcuts import get_object_or_404, render, redirect
 
+from django.dispatch import Signal
 from mynews import signals
 from mynews.models import News, Comments, Spot, Activities, UserProfile
 from mynews.signals import comments_done
@@ -41,7 +45,7 @@ def today(request):
 
         #signal / tag 1 = commnet
         comments_done.send(sender=None, publisher_text=publisher_text, title_text=news.title_text, pub_date=pub_date, comment_text=comment_text, tag='1')
-        
+        print("signal call")
         #db 객체만듬
         c = Comments(news=news, comment_text=comment_text, publisher_text=publisher_text, pub_date=pub_date)
         c.save()
@@ -51,7 +55,7 @@ def today(request):
         
         #return render(request, 'mynews/detail.html', {'news': news, 'comment_list':comment_list})
         
-        #Comments모델 객체 받아와 ( 오늘 News의 Comments들만)
+    #Comments모델 객체 받아와 ( 오늘 News의 Comments들만)
     comment_list = Comments.objects.filter(news=daily_news_list)
     comment_list_count = comment_list.count()
     
@@ -88,6 +92,8 @@ def detail(request, news_id):
         
         #signal / tag 1 = commnet
         comments_done.send(sender=None, publisher_text=publisher_text, title_text=news.title_text, pub_date=pub_date, comment_text=comment_text, tag='1')
+        print("detail-signal call")
+        
         #db 객체만듬
         c = Comments(news=news, comment_text=comment_text, publisher_text=publisher_text, pub_date=pub_date)
         c.save()
@@ -130,7 +136,6 @@ def user_logout(request):
 
 def comment_delete(request, comment_id):
     comment = Comments.objects.get(pk=comment_id)
-    print(comment)
     comment.delete()
     
     today = datetime.now().date()
@@ -153,4 +158,25 @@ def comment_delete(request, comment_id):
 
 def comment_edit(request):
     return
+
+def delete_post(request):
+    if request.method == 'DELETE':
+
+        post = Comments.objects.get(pk=int(QueryDict(request.body).get('postpk')))
+        
+        print(post)
+
+
+        response_data = {}
+        response_data['msg'] = 'Post was deleted.'
+
+        return HttpResponse(
+            json.dumps(response_data),
+            content_type="application/json"
+        )
+    else:
+        return HttpResponse(
+            json.dumps({"nothing to see": "this isn't happening"}),
+            content_type="application/json"
+        )
 
