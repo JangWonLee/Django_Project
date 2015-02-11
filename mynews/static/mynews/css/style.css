@@ -32,3 +32,12 @@
 .word-break {
 	word-break: break-all;
 }
+
+.gi {
+	font-size: 1.5em;
+}
+
+.gi-red {
+	font-size: 1.5em;
+	color: red;
+}

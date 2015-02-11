@@ -50,7 +50,7 @@ $(document).ready(function(){
 				<div class="panel-heading" role="tab" id="headingOne">
 					<div class="panel-title">
 						<div align="left" style="font-size: small;">
-							{{news.pub_date}} <span class="float-right" style="font-size: small; font-weight: bold;">{{news.comment_count}} COMMENTS</span>
+							{{news.pub_date}} <span class="glyphicon glyphicon-pushpin gi float-right"></span><span class="float-right" style="font-size: small; font-weight: bold;">{{news.comment_count}} COMMENTS &nbsp;&nbsp;</span>
 						</div>
 						<div>
 							<h2>
@@ -62,7 +62,7 @@ $(document).ready(function(){
 						</div>
 						<div class="news-opinion">{{ news.opinion_text|urlize|linebreaks}}</div>
 						<div class="news-link">
-							<a href="{{news.link_text}}">{{ news.link_text }}</a>
+							<a href="{{news.link_text}}">{{ news.link_text }}</a> 
 						</div>
 					</div>
 				</div>
