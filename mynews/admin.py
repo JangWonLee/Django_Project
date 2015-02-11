@@ -1,5 +1,5 @@
 from django.contrib import admin
-from mynews.models import News, Comments, Spot, Activities, UserProfile
+from mynews.models import News, Comments, Spot, Activities, MyNews
 
 class CommentsInline(admin.TabularInline):
     model = Comments
@@ -33,3 +33,11 @@ class ActivitiesAdmin(admin.ModelAdmin):
     list_filter = ['pub_date']
 
 admin.site.register(Activities,ActivitiesAdmin)
+
+class MyNewsAdmin(admin.ModelAdmin):
+    fields = ['user_id', 'news_id', 'pub_date']
+    
+    list_display = ('user_id', 'news_id', 'pub_date')
+    list_filter = ['user_id']
+    
+admin.site.register(MyNews, MyNewsAdmin)

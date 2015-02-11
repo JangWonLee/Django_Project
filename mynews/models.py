@@ -58,8 +58,9 @@ class Activities(models.Model):
         return self.comment_text
         return self.tag
 
-class UserProfile(models.Model):
-    user = models.OneToOneField(User)
-    avatar = models.ImageField(upload_to = 'picture/', default = 'picture/profile-no-img.jpg')
+class MyNews(models.Model):
+    user_id = models.IntegerField(max_length=100)
+    news_id = models.IntegerField(max_length=100)
+    pub_date = models.DateTimeField('date published')
     
     

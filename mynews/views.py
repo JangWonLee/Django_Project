@@ -1,18 +1,20 @@
-import json
 from datetime import datetime, timedelta, time
+import json
 
 from django import forms
 from django.contrib.auth import authenticate, login, logout
 from django.core.files.images import get_image_dimensions
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
-from django.http.request import QueryDict
-from django.http.response import HttpResponse
-from django.shortcuts import get_object_or_404, render, redirect
-
 from django.dispatch import Signal
+from django.http.request import QueryDict
+from django.http.response import HttpResponse, HttpResponseRedirect
+from django.shortcuts import get_object_or_404, render, redirect
+from django.views.decorators.csrf import csrf_exempt
+
 from mynews import signals
-from mynews.models import News, Comments, Spot, Activities, UserProfile
+from mynews.models import News, Comments, Spot, Activities, MyNews
 from mynews.signals import comments_done
+from django.http import response
 
 
 def index(request):
@@ -45,7 +47,7 @@ def today(request):
 
         #signal / tag 1 = commnet
         comments_done.send(sender=None, publisher_text=publisher_text, title_text=news.title_text, pub_date=pub_date, comment_text=comment_text, tag='1')
-        print("signal call")
+        print("today -> signal call")
         #db 객체만듬
         c = Comments(news=news, comment_text=comment_text, publisher_text=publisher_text, pub_date=pub_date)
         c.save()
@@ -86,6 +88,7 @@ def detail(request, news_id):
     
     #Comment를 Post 했을 경우
     if request.method == 'POST':
+        #print(request.POST['text'])
         comment_text = request.POST.get("comment_text", False)
         publisher_text = request.user.username
         pub_date = datetime.now()
@@ -153,30 +156,35 @@ def comment_delete(request, comment_id):
     comment_list = Comments.objects.filter(news=daily_news_list)
     comment_list_count = comment_list.count()
     
+    
+    #return HttpResponseRedirect([{'daily_news_list': daily_news_list, 'spot_price': spot_price, 'comment_list': comment_list, 'comment_list_count': comment_list_count}])
     return render(request, 'mynews/today.html', {'daily_news_list': daily_news_list, 'spot_price': spot_price, 'comment_list': comment_list, 'comment_list_count': comment_list_count} )
     
-
-def comment_edit(request):
-    return
-
-def delete_post(request):
-    if request.method == 'DELETE':
-
-        post = Comments.objects.get(pk=int(QueryDict(request.body).get('postpk')))
+@csrf_exempt
+def comment_edit(request, news_id, comment_id):
+    print("comment_edit call")
+    
+    if request.method == 'POST' and request.is_ajax():
+        print(comment_id)
+        print(request.POST['edit_comment_text'])
+        print("comment->POST")
         
-        print(post)
+        edit_comment_text = request.POST['edit_comment_text']
+        news = News.objects.get(pk=news_id)
 
-
-        response_data = {}
-        response_data['msg'] = 'Post was deleted.'
-
-        return HttpResponse(
-            json.dumps(response_data),
-            content_type="application/json"
-        )
+        print(request.user.id)
+        
+        #signal/ tag2 = edit
+        comments_done.send(sender=None, publisher_text=request.user.username, title_text=news.title_text, pub_date=datetime.now(), comment_text=edit_comment_text, tag='2')
+        
+        
+        comment = Comments.objects.get(pk=comment_id)
+        comment.comment_text = edit_comment_text
+        comment.pub_date = datetime.now()
+        
+        comment.save()
+        return HttpResponse(edit_comment_text);
     else:
-        return HttpResponse(
-            json.dumps({"nothing to see": "this isn't happening"}),
-            content_type="application/json"
-        )
+        return HttpResponse("Something Wrong")
+    
 

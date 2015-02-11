@@ -19,13 +19,13 @@
 					<div align="right" style="font-size: x-small;">{{activity.pub_date}}</div>
 					<img src=" {{ STATIC_URL }}picture/{{activity.publisher_text}}.jpg " width="50" height="50"> 
 				{% if activity.tag == '1' %}
-					<b>{{activity.publisher_text}}</b> commented on "{{activity.title_text}}"
+					<b>{{activity.publisher_text}}</b> commented on "{{activity.title_text}}".
 				{% endif %}
 				{% if activity.tag == '2' %}
-				
+					<b>{{activity.publisher_text}}</b> edited the comment.
 				{% endif %}
 				{% if activity.tag == '3' %}
-				
+					<b>{{activity.publisher_text}}</b> deleted the comment.
 				{% endif %}
 				</div>
 			</div>
