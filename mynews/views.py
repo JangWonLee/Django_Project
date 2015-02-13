@@ -232,7 +232,6 @@ def news_clip(request):
         
         c = Clippings(user=user, news=news, pub_date=pub_date)
         c.save()
-        
                 
         return HttpResponse("news_clip Success")
     else:
@@ -245,14 +244,10 @@ def news_clip_cancel(request):
     if request.method == 'POST' and request.is_ajax():
         user = request.user
         news_id = request.POST['news_id']
-        
         news = News.objects.get(pk=news_id)
         
-        print(news)
-        
         c = Clippings.objects.filter(news=news, user=user)
-        
-        print(c)
+        c.delete()
                 
         return HttpResponse("news_clip_cancel Success")
     else:

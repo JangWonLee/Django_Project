@@ -5,10 +5,10 @@
 $(document).ready(function(){
 
 // 	comment EDIT
-	$(".comment-edit").click(function(){
+	$(document).on('click', '.comment-edit', function() {
 		var $parent = $(this).parent().parent().parent();
-		var submit = "<a class='comment-submit' href='#'>submit</a>";
-		var cancel = "<a class='comment-cancel' href='#'>cancel</a>";
+		var submit = "<a class='comment-submit'>submit</a>";
+		var cancel = "<a class='comment-cancel'>cancel</a>";
 		
 		$parent.find(".comment-text").html('<textarea class="form-control"  name="comment_text">' + $(this).parent().parent().parent().find(".comment-text").text() + '</textarea>');
 		$parent.find(".comment-delete").hide();
@@ -16,7 +16,6 @@ $(document).ready(function(){
 		$parent.find(".comment-edit").hide();
 		$parent.find(".comment-pub-date").append(submit);
 		$parent.find(".comment-submit").addClass("up");
-// 		$parent.find(".comment-pub-date").append(cancel);
 
 		$parent.find(".comment-submit").click(function(){
 			var $this = $(this);
@@ -44,7 +43,7 @@ $(document).ready(function(){
 	});
 	
 // 	comment DELETE
-	$(".comment-delete").click(function() {
+		$(document).on('click', '.comment-delete', function() {
 		var $this = $(this);
 		
 		$.ajax({
@@ -61,86 +60,68 @@ $(document).ready(function(){
 		});
 	});
 	
-	
-	$('.glyphicon.glyphicon-pushpin').click(function() {
+// 	comment POST
+	$('.btn.btn-default').click(function() {
 		var $this = $(this);
-		var news_id = $this.parents('.col-md-8').attr('news-data');
 		
-		$this.toggle(function() {
-			$.ajax({
-				url: "/mynews/news_clip/",
-				type: "POST",
-				data: {
-					news_id: news_id,
-				},
-				datatype: "html",
-				succcess: function(data) {
-					alert("success");
-				},
-			}).done(function() {
-				$this.parents('.col-md-8').find('.glyphicon.glyphicon-pushpin.float-right').addClass("pushpin-red");
-			});
-		}, function() {
-			$.ajax({
-				url: "/mynews/news_clip_cancel/",
-				type: "POST",
-				data: {
-					news_id: news_id,
-				},
-				datatype: "html",
-				succcess: function(data) {
-					alert("success");
-				},
-			}).done(function() {
-				$this.removeClass('pushpin-red');
-			});
+		$.ajax({
+			url: "/mynews/comment_post/",
+			type: "POST",
+			data: {
+				news_id: $this.parents('.col-md-8').find('.panel.panel-default.word-break').attr("news_data"),
+				comment_text: $this.parents('.comment-post').find('.form-control').val(),
+			},
+			datatype: "json",
+			success: function(obj) {
+				console.log(obj);
+				var comment = " <div class='panel panel-default word-break' news_data='" + obj.news_id + "' comment_data='" + obj.comment_id +"'><div class='panel-body' style='margin-left: 10px; margin-right: 10px'>	<div><img src=' {{ STATIC_URL }}picture/" + obj.publisher_text + ".jpg ' width='50' height='50'> <span style='color: navy; font-weight: bold;'>" + obj.publisher_text + "</span></div><div><div class='comment-text'><p>" + obj.comment_text + "</p></div></div>	<div style='font-size: x-small;'><span class='comment-pub-date'>" + obj.pub_date + "</span> <span class='float-right' style='margin-left: 10px'><a class='comment-delete'>Delete</a></span> <span class='float-right'><a class='comment-edit' style='font-size:'>Edit</a></span></div></div></div>  "
+				$this.parents('.col-md-8').find('.comment-load').append(comment);
+			},
 		});
 	});
 	
-// // 	comment CLIP_CANCEL
-// 	$(".pushpin-red").click(function() {
-// 		var $this = $(this);
-// 		var news_id = $this.parents('.col-md-8').attr('news-data');
-// // 		var news_id = $this.parents('.col-md-8').find('.panel.panel-default.word-break').attr('news-data');
-// 		alert(news_id);
+// 	comment CLIP_CANCEL
+	$(document).on('click', '.pushpin-red', function() {
+		var $this = $(this);
+		var news_id = $this.parents('.col-md-8').attr('news-data');
+		alert("clip cancel");
 		
-// 		$.ajax({
-// 			url: "/mynews/news_clip_cancel/",
-// 			type: "POST",
-// 			data: {
-// 				news_id: news_id,
-// 			},
-// 			datatype: "html",
-// 			succcess: function(data) {
-// 				alert("success");
-// 			},
-// 		}).done(function() {
-// 			$this.removeClass('pushpin-red');
-// 		});
-// 	});
+		$.ajax({
+			url: "/mynews/news_clip_cancel/",
+			type: "POST",
+			data: {
+				news_id: news_id,
+			},
+			datatype: "html",
+			succcess: function(data) {
+				alert("success");
+			},
+		}).done(function() {
+			$this.removeClass('pushpin-red');
+		});
+	});
 	
 
-// // 	comment CLIP
-// 	$(".glyphicon.glyphicon-pushpin.float-right").click(function() {
-// 		var $this = $(this);
-// 		var news_id = $this.parents('.col-md-8').attr('news-data');
-// // 		var news_id = $this.parents('.col-md-8').find('.panel.panel-default.word-break').attr('news-data');
-// 		alert(news_id);
+// 	comment CLIP
+	$(document).on('click', '.glyphicon.glyphicon-pushpin.float-right:not(.pushpin-red)', function() {
+		var $this = $(this);
+		var news_id = $this.parents('.col-md-8').attr('news-data');
+		alert("clip");
 		
-// 		$.ajax({
-// 			url: "/mynews/news_clip/",
-// 			type: "POST",
-// 			data: {
-// 				news_id: news_id,
-// 			},
-// 			datatype: "html",
-// 			succcess: function(data) {
-// 				alert("success");
-// 			},
-// 		}).done(function() {
-// 			$this.parents('.col-md-8').find('.glyphicon.glyphicon-pushpin.float-right').addClass("pushpin-red");
-// 		});
-// 	});
+		$.ajax({
+			url: "/mynews/news_clip/",
+			type: "POST",
+			data: {
+				news_id: news_id,
+			},
+			datatype: "html",
+			succcess: function(data) {
+				alert("success");
+			},
+		}).done(function() {
+			$this.parents('.col-md-8').find('.glyphicon.glyphicon-pushpin.float-right').addClass("pushpin-red");
+		});
+	});
 
 });
 </script>
@@ -179,7 +160,7 @@ $(document).ready(function(){
 	<p> {{comment_list_count}} Comments.</p>
 	<hr>
 
-	
+	<div class="comment-load">
 	{% if comment_list %}
 		{% for comment in comment_list %}
 		<div class="panel panel-default word-break" news_data="{{news.id}}" comment_data="{{comment.id}}">
@@ -200,8 +181,9 @@ $(document).ready(function(){
 		</div>
 		{% endfor %}
 	{% endif %}
+	</div>
 	
-	<div>
+	<div class="comment-post">
 	<br />
 		<div>
 			<textarea class="form-control" placeholder="Comment" id="comment_text" name="comment_text"></textarea>
