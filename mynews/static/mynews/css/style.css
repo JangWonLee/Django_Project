@@ -33,11 +33,15 @@
 	word-break: break-all;
 }
 
-.gi {
+.pushpin {
 	font-size: 1.5em;
 }
 
-.gi-red {
-	font-size: 1.5em;
+.pushpin-red {
 	color: red;
+}
+
+.up {
+	float: right;
+	font-size: large;	
 }

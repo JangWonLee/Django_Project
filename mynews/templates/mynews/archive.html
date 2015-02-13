@@ -1,5 +1,5 @@
 {% extends "mynews/base.html" %} 
-{% block title %}TP_NEWS{% endblock %}
+{% block title %}TP_PARTNERS{% endblock %}
 
 {% block content %}
 <div class="col-md-2"></div>
@@ -12,8 +12,8 @@
 			<thead>
 				<tr>
 					<th scope="col" style="width: 63%">Title</th>
-					<th scope="col" style="width: 27%">Reg.date</th>
-					<th scope="col" style="width: 10%">Comments</th>
+					<th scope="col" style="width: 29%">Reg.date</th>
+					<th scope="col" style="width: 8%">Comments</th>
 				</tr>
 			</thead>
 			
@@ -23,7 +23,7 @@
 				<tr>
 					<td scope="row"><a href="{% url 'mynews:detail' news.id %}">{{ news.title_text }}</a></td>
 					<td>{{news.pub_date}}</td>
-					<td>{{news.comment_count}}</td>
+					<td align="center">{{news.comment_count}}</td>
 				</tr>
 			{% endfor %}
 			</tbody>

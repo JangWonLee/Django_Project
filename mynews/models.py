@@ -58,9 +58,11 @@ class Activities(models.Model):
         return self.comment_text
         return self.tag
 
-class MyNews(models.Model):
-    user_id = models.IntegerField(max_length=100)
-    news_id = models.IntegerField(max_length=100)
+class Clippings(models.Model):
+    #user_id = models.IntegerField(max_length=100)
+    user = models.ForeignKey(User, related_name='clippings')
+    news = models.ForeignKey(News, related_name='clippings')
+    #news_id = models.IntegerField(max_length=100)
     pub_date = models.DateTimeField('date published')
     
     

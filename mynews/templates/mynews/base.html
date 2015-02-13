@@ -63,7 +63,7 @@
 							<li><a href="{% url 'mynews:today' %}">Today News</a></li>
 							<li><a href="{% url 'mynews:archive' %}">Archive</a></li>
 							<li><a href="{% url 'mynews:activity' %}">Activity</a></li>
-							<li><a href="#">My</a></li>
+							<li><a href="{% url 'mynews:clipping' %}">My</a></li>
 						</ul>
 						<div align="right" style="color: aqua; font-weight: bolder; font-size: large;">
 							Welcome {{ user.username }}
