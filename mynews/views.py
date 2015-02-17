@@ -5,6 +5,7 @@ from django import forms
 from django.contrib.auth import authenticate, login, logout
 from django.core.files.images import get_image_dimensions
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
+from django.db.models.query_utils import Q
 from django.dispatch import Signal
 from django.http import response
 from django.http.request import QueryDict
@@ -23,6 +24,15 @@ def index(request):
 def activity(request):
     activity_list = Activities.objects.all().order_by('-pub_date')
     
+    paginator = Paginator(activity_list, 10)
+    page = request.GET.get('page')
+    try:
+        activity_list = paginator.page(page)
+    except PageNotAnInteger:
+        activity_list = paginator.page(1)
+    except EmptyPage:
+        activity_list = paginator.page(paginator.num_pages)
+    
     return render(request, 'mynews/activity.html', {'activity_list': activity_list})
 
 def clipping(request):
@@ -39,7 +49,7 @@ def today(request):
     today_end = datetime.combine(tomorrow, time())
     
     #오늘 News와 Spot price 받아와
-    daily_news_list = News.objects.filter(pub_date__lte=today_end, pub_date__gte=today_start)
+    daily_news_list = News.objects.filter(pub_date__lte=today_end, pub_date__gte=today_start).order_by('-pub_date')
     spot_price_list = Spot.objects.filter(pub_date__lte=today_end, pub_date__gte=today_start)
     spot_price = spot_price_list.first()
     
@@ -253,4 +263,26 @@ def news_clip_cancel(request):
     else:
         return HttpResponse("news_clip_cancel Fail")
     
+def news_search(request):
+    print("news_search call")
+    if request.method == 'POST':
+        search_text = request.POST.get('search-text', False)
+        search_news_list = News.objects.filter(title_text__contains=search_text).order_by('-pub_date')
+        
+        #Pagination
+        paginator = Paginator(search_news_list, 10)
+        page = request.GET.get('page')
+        try:
+            archive_news = paginator.page(page)
+        except PageNotAnInteger:
+            archive_news = paginator.page(1)
+        except EmptyPage:
+            archive_news = paginator.page(paginator.num_pages)
+        
+        return render(request, 'mynews/archive.html', {'archive_news': archive_news})
+    else:
+        return HttpResponse("fail")
 
+def test(request):
+    
+    return render(request, 'mynews/test.html')

@@ -1,0 +1,21 @@
+{% extends "mynews/base.html" %}
+{% block title %}TP_NEWS{% endblock %}
+
+{% block content %}
+<script>
+
+var app = angular.module('app', []);
+
+app.controller('MainCtrl', function($scope) {
+	$scope.message = 'world';
+});
+
+</script>
+
+
+<div class="col-md-10">
+	HI
+</div>
+
+{% endblock %}
+

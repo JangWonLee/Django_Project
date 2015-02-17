@@ -2,7 +2,31 @@
 {% block title %}TP_PARTNERS{% endblock %}
 
 {% block content %}
-<div class="col-md-2"></div>
+<script type="text/javascript">
+
+// $(document).ready(function() {
+	
+// 	$('#btn-search').click(function() { 
+// 		$this = $(this);
+		
+// 		alert($this.parents('.col-md-8').find('.form-control-search').val());
+		
+// 		$.ajax({ 
+// 			url: "/mynews/news_search/",
+// 			type: "post",
+// 			data: {
+// 				search_text: $this.parents('.col-md-8').find('.form-control-search').val(),
+// 			},
+// 			success: function(data) {
+// 				console.log("success");
+// 			},
+// 		});
+// 	});
+// });
+
+</script>
+
+<div class="col-sm-1"></div>
 <div class="col-md-8">
 		<header>
 			<h1>Archive</h1>
@@ -27,26 +51,34 @@
 				</tr>
 			{% endfor %}
 			</tbody>
-			
-			<tfoot>
-				<!-- 페이지네이션 -->
-				<div class="pagination">
-				    <span class="step-links">
-				        {% if archive_news.has_previous %}
-				            <a href="?page={{ archive_news.previous_page_number }}">previous</a>
-				        {% endif %}
-				
-				        <span class="current">
-				            Page {{ archive_news.number }} of {{ news.paginator.num_pages }}.
-				        </span>
-				
-				        {% if archive_news.has_next %}
-				            <a href="?page={{ archive_news.next_page_number }}">next</a>
-				        {% endif %}
-				    </span>
-				</div>
-			</tfoot>
 		</table>
+		
+		<!-- search form -->
+		<div>
+			<form method="post" action="{% url 'mynews:news_search' %}">
+			{% csrf_token %}
+			 	<span><input type="text" class="form-control-search" name="search-text" placeholder="">
+				<button type="submit" id="btn-search" class="form-group btn btn-default">Search</button></span>
+			</form>
+		</div>
+		<!-- 페이지네이션 -->
+		<div class="pagination" align="center">
+		    <span class="step-links">
+		        {% if archive_news.has_previous %}
+	            <a href="?page={{ archive_news.previous_page_number }}">previous</a>
+		        {% endif %}
+					
+		        <span class="current">
+		            Page {{ archive_news.number }} of {{ news.paginator.num_pages }}.
+		        </span>
+					
+		        {% if archive_news.has_next %}
+		            <a href="?page={{ archive_news.next_page_number }}">next</a>
+		        {% endif %}
+		    </span>
+					
+		</div>
+	
 		{% else %}
 			<p>No News. Something wrong..</p>
 		{% endif %}

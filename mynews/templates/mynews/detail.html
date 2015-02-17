@@ -127,7 +127,7 @@ $(document).ready(function(){
 </script>
 
 
-<div class="col-md-2"></div>
+<div class="col-sm-1"></div>
 <div class="col-md-8" news-data="{{news.id}}">
 	{% autoescape on %}
 	<div>
@@ -140,7 +140,6 @@ $(document).ready(function(){
 		{% endif %}
 		
 		<br />
-		aaa{{clippings.id}}
 		<h1 class="news-title">{{news.title_text}}</h1>
 		<h4 class="news-summary">{{news.summary_text}}</h3><br />
 		<p class="news-opinion">{{news.opinion_text}}</p>

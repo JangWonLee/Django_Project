@@ -19,6 +19,8 @@ urlpatterns = patterns('',
     url(r'^news_clip_cancel/$', views.news_clip_cancel, name='news_clip_cancel'),
     url(r'^comment_delete/$', views.comment_delete, name='comment_delete'),
     url(r'^comment_post/$', views.comment_post, name='comment_post'),
+    url(r'^news_search/$', views.news_search, name='news_search'),
+    url(r'^test/$', views.test, name='test'),
     
 
 #    url(r'^$', views.IndexView.as_view(), name='index'),

@@ -13,7 +13,6 @@
 <script type="text/javascript" src="{% static 'mynews/js/ajax_csrf.js' %}"></script>
 
 <!-- Bootstrap core CSS -->
-<script type="text/javascript" src="{% static 'bootstrap/js/jquery-1.11.2.min.js' %}"></script>
 <link rel="stylesheet" type="text/css" href="{% static 'bootstrap/css/bootstrap.css' %} " />
 <link rel="stylesheet" type="text/css" href="{% static 'bootstrap/css/bootstrap-theme.css' %} " />
 <script src="{% static 'bootstrap/js/bootstrap.js' %}"></script>
@@ -21,14 +20,12 @@
 <!-- Custom styles for this template -->
 <link href="{% static 'mynews/css/sticky-footer-navbar.css' %}" rel="stylesheet">
 <link href="{% static 'mynews/css/style.css' %}" rel="stylesheet">
+<link href="{% static 'mynews/css/dashboard.css' %}" rel="stylesheet">
 
 
 <!--[if lt IE 9]>
 	<script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
 	<![endif]-->
-
-<!-- jQuery (부트스트랩의 자바스크립트 플러그인을 위해 필요한) -->
-<!-- <script src="//code.jquery.com/jquery-1.11.2.min.js"></script> -->
 
 <!-- font -->
 <link href="http://fonts.googleapis.com/css?family=Open+Sans:400,300,700|Merriweather:400,400italic,700italic" rel="stylesheet" type="text/css" />
@@ -47,129 +44,120 @@
 
 <body>
 	<div id="wrap">
-		<header>
-			<div class="navbar navbar-inverse navbar-fixed-top">
-				<div class="container">
-					<div class="navbar-header">
-						<button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-							<span class="icon-bar"></span> <span class="icon-bar"></span> <span class="icon-bar"></span>
-						</button>
+		<nav class="navbar navbar-inverse navbar-fixed-top">
+			<div class="container-fluid">
+				<!-- 				<div class="navbar-header"> -->
+				<div>
+					<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+						<span class="sr-only">Toggle navigation</span> <span class="icon-bar"></span> <span class="icon-bar"></span> <span class="icon-bar"></span>
+					</button>
+					<a class="navbar-brand" href="{% url 'mynews:index' %}">&nbsp;&nbsp;TP PARTNERS </a> {% if user.is_authenticated %}
+
+					<div align="right" style="color: aqua; font-weight: bolder; font-size: large;">
+						Welcome {{ user.username }}
+						<form class="navbar-form navbar-right" method="post" action="{% url 'mynews:user_logout' %}">
+							{% csrf_token %}
+							<button class="btn btn-link" type="submit" value="Logout" style="color: aqua;">Log out</button>
+						</form>
 					</div>
-					<div class="navbar-collapse collapse">
 
-						{% if user.is_authenticated %}
-						<ul class="nav navbar-nav">
-							<li class="active"><a style="color: aqua; font-weight: bolder;" class="navbar-brand" href="{% url 'mynews:index' %}">TP Partners</a></li>
-							<li><a href="{% url 'mynews:today' %}">Today News</a></li>
-							<li><a href="{% url 'mynews:archive' %}">Archive</a></li>
-							<li><a href="{% url 'mynews:activity' %}">Activity</a></li>
-							<li><a href="{% url 'mynews:clipping' %}">My</a></li>
-						</ul>
-						<div align="right" style="color: aqua; font-weight: bolder; font-size: large;">
-							Welcome {{ user.username }}
-
-							<form method="post" action="{% url 'mynews:user_logout' %}">
-								{% csrf_token %}
-								<button type="submit" value="Logout" class="btn btn-link" style="color: aqua;">Log out</button>
-							</form>
-						</div>
-
-						{% else %}
-						<ul class="nav navbar-nav">
-							<li class="active"><a style="color: aqua; font-weight: bolder;" class="navbar-brand" href="{% url 'mynews:index' %}">TP Partners</a></li>
-						</ul>
-
-						<div class="navbar-form navbar-right">
-							<a href="{% url 'mynews:login_view' %}" class="btn btn-blog outline-white pull-right">Log in</a>
-						</div>
-						{% endif %}
-					</div>
-					<!--/.navbar-collapse -->
+					{% else %} <span> <a href="{% url 'mynews:login_view' %}" class="btn btn-blog outline-white pull-right">Log in</a>
+					</span> {% endif %}
 				</div>
 			</div>
-		</header>
+		</nav>
 
-		<!-- 		<div class="jumbotron">{% block jumbotron %}{% endblock %}</div> -->
+		<div class="container-fluid">
+			<div class="row">
+				<div class="col-sm-3 col-md-2 sidebar">
+					<ul class="nav nav-sidebar">
+						<li><a href="{% url 'mynews:today' %}">Today News <span class="sr-only">(current)</span></a></li>
+						<li><a href="{% url 'mynews:archive' %}">Archive</a></li>
+						<li><a href="{% url 'mynews:activity' %}">Activity</a></li>
+						<li><a href="{% url 'mynews:clipping' %}">Clipping</a></li>
+						<li><a href="{% url 'mynews:test' %}">TEST</a></li>
+					</ul>
+				</div>
+				<div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
+					<!--           <h1 class="page-header">Dashboard</h1> -->
 
-		<div class="container">
-			<br /> <br /> <br />
-			<div>{% block content %}{% endblock %}</div>
+					<div>{% block content %}{% endblock %}</div>
+
+				</div>
+			</div>
 		</div>
 	</div>
-
 	<footer>
 		<div class="footer">
-			<div class="container">
-				<div class="row">
-					<div class="col-sm-4 col-md-4 footer-widget">
-						<h3>Statistics</h3>
+			<div class="row">
+				<div class="col-sm-4 col-md-4 footer-widget">
+					<h3>Statistics</h3>
 
-						<span>We can't compete with Mom! Her company is big and evil! </span>
+					<span>We can't compete with Mom! Her company is big and evil! </span>
 
-						<div class="stats">
-							<div class="line">
-								<span class="counter">27</span> <span class="caption">Articles</span>
-							</div>
-							<div class="line">
-								<span class="counter">208</span> <span class="caption">Comments</span>
-							</div>
-							<div class="line">
-								<span class="counter">2</span> <span class="caption">Authors</span>
-							</div>
+					<div class="stats">
+						<div class="line">
+							<span class="counter">27</span> <span class="caption">Articles</span>
+						</div>
+						<div class="line">
+							<span class="counter">208</span> <span class="caption">Comments</span>
+						</div>
+						<div class="line">
+							<span class="counter">2</span> <span class="caption">Authors</span>
 						</div>
 					</div>
+				</div>
 
-					<div class="col-sm-4 col-md-4 footer-widget">
-						<h3>Recent posts</h3>
-						<div class="post-recent-widget">
-							<div class="row">
-								<div class="col-sm-12">
-									<div class="media">
-<!-- 										<a class="pull-left" href="post-video.html"><img class="media-object" src="img/img2.jpg" width="80" alt=""></a> -->
-										<div class="media-body">
-											<h4 class="media-heading">
-												<a href="post-video.html">But I've never been to the moon!</a>
-											</h4>
-											<p class="post-date">may 10, 2014</p>
-										</div>
+				<div class="col-sm-4 col-md-4 footer-widget">
+					<h3>Recent posts</h3>
+					<div class="post-recent-widget">
+						<div class="row">
+							<div class="col-sm-12">
+								<div class="media">
+									<!-- 										<a class="pull-left" href="post-video.html"><img class="media-object" src="img/img2.jpg" width="80" alt=""></a> -->
+									<div class="media-body">
+										<h4 class="media-heading">
+											<a href="post-video.html">But I've never been to the moon!</a>
+										</h4>
+										<p class="post-date">may 10, 2014</p>
 									</div>
-									<div class="media">
-<!-- 										<a class="pull-left" href="post-typography.html"><img class="media-object" src="img/img1.jpg" width="80" alt=""></a> -->
-										<div class="media-body">
-											<h4 class="media-heading">
-												<a href="post-typography.html">We don't have a brig</a>
-											</h4>
-											<p class="post-date">september 27, 2014</p>
-										</div>
-									</div>
-									<div class="media">
-<!-- 										<a class="pull-left" href="post-image.html"><img class="media-object" src="img/img3.jpg" width="80" alt=""></a> -->
-										<div class="media-body">
-											<h4 class="media-heading">
-												<a href="post-image.html">Every other day it's food, food, food.</a>
-											</h4>
-											<p class="post-date">april 2, 2014</p>
-										</div>
-									</div>
-
 								</div>
+								<div class="media">
+									<!-- 										<a class="pull-left" href="post-typography.html"><img class="media-object" src="img/img1.jpg" width="80" alt=""></a> -->
+									<div class="media-body">
+										<h4 class="media-heading">
+											<a href="post-typography.html">We don't have a brig</a>
+										</h4>
+										<p class="post-date">september 27, 2014</p>
+									</div>
+								</div>
+								<div class="media">
+									<!-- 										<a class="pull-left" href="post-image.html"><img class="media-object" src="img/img3.jpg" width="80" alt=""></a> -->
+									<div class="media-body">
+										<h4 class="media-heading">
+											<a href="post-image.html">Every other day it's food, food, food.</a>
+										</h4>
+										<p class="post-date">april 2, 2014</p>
+									</div>
+								</div>
+
 							</div>
 						</div>
 					</div>
+				</div>
 
-					<div class="col-sm-4 col-md-4 footer-widget clearfix">
-						<h3>Tags</h3>
-						<ul class="tags">
-							<li><a href="#">OpenPGP</a></li>
-							<li><a href="#">Django</a></li>
-							<li><a href="#">Bitcoin</a></li>
-							<li><a href="#">Security</a></li>
-							<li><a href="#">GNU/Linux</a></li>
-							<li><a href="#">Git</a></li>
-							<li><a href="#">Homebrew</a></li>
-							<li><a href="#">Debian</a></li>
-						</ul>
-					</div>
+				<div class="col-sm-4 col-md-4 footer-widget clearfix">
+					<h3>Tags</h3>
+					<ul class="tags">
+						<li><a href="#">OpenPGP</a></li>
+						<li><a href="#">Django</a></li>
+						<li><a href="#">Bitcoin</a></li>
+						<li><a href="#">Security</a></li>
+						<li><a href="#">GNU/Linux</a></li>
+						<li><a href="#">Git</a></li>
+						<li><a href="#">Homebrew</a></li>
+						<li><a href="#">Debian</a></li>
+					</ul>
 				</div>
 			</div>
 		</div>
@@ -182,3 +170,4 @@
 		</div>
 	</footer>
 </body>
+</html>

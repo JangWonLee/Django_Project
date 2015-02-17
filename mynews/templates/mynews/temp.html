@@ -1,70 +1,181 @@
-<div class="panel panel-default word-break" news_data="{{news.id}}" comment_data="{{comment.id}}">
-	<div class="panel-body" style="margin-left: 10px; margin-right: 10px">
-		<div>
-			<img src=" {{ STATIC_URL }}picture/{{comment.publisher_text}}.jpg " width="50" height="50"> 
-			<span style="color: navy; font-weight: bold;">{{comment.publisher_text}}</span>
-		</div>
-		<div>
-			<div class="comment-text" id="tempid">{{comment.comment_text|urlize|linebreaks}}</div>
-		</div>
-		<div style="font-size: x-small;">
-			<span class="comment-pub-date">{{comment.pub_date}}</span> <span class="float-right" style="margin-left: 10px"><a href="#" class="comment-delete">Delete</a></span> <span class="float-right"><a
-				href="#" class="comment-edit" style="font-size:">Edit</a></span>
+{% load staticfiles %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="description" content="">
+<meta name="author" content="">
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+
+<script type="text/javascript" src="{% static 'mynews/js/ajax_csrf.js' %}"></script>
+
+<!-- Bootstrap core CSS -->
+<link rel="stylesheet" type="text/css" href="{% static 'bootstrap/css/bootstrap.css' %} " />
+<link rel="stylesheet" type="text/css" href="{% static 'bootstrap/css/bootstrap-theme.css' %} " />
+<script src="{% static 'bootstrap/js/bootstrap.js' %}"></script>
+
+<!-- Custom styles for this template -->
+<link href="{% static 'mynews/css/sticky-footer-navbar.css' %}" rel="stylesheet">
+<link href="{% static 'mynews/css/style.css' %}" rel="stylesheet">
+<link href="{% static 'mynews/css/dashboard.css' %}" rel="stylesheet">
+
+
+<!--[if lt IE 9]>
+	<script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+	<![endif]-->
+
+<!-- font -->
+<link href="http://fonts.googleapis.com/css?family=Open+Sans:400,300,700|Merriweather:400,400italic,700italic" rel="stylesheet" type="text/css" />
+
+<!-- KeyLime -->
+<!-- <link rel="stylesheet" href="{% static 'keylime/css/bootstrap.min.css' %}"/> -->
+<link rel="stylesheet" href="{% static 'keylime/css/style.css' %}" />
+<link rel="stylesheet" href="{% static 'keylime/css/icons.css' %}" />
+<link rel="stylesheet" href="{% static 'keylime/css/animate.min.css' %}" />
+
+
+<title>{% block title %}TP PARTNERS{% endblock %}</title>
+</head>
+
+<!-- end of head -->
+
+<body>
+	<div id="wrap">
+		<nav class="navbar navbar-inverse navbar-fixed-top">
+			<div class="container-fluid">
+				<div class="navbar-header">
+					<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+						<span class="sr-only">Toggle navigation</span> <span class="icon-bar"></span> <span class="icon-bar"></span> <span class="icon-bar"></span>
+					</button>
+					<a class="navbar-brand" href="#">Project name</a> {% if user.is_authenticated %}
+					
+					<div class="navbar-right" align="right" style="color: aqua; font-weight: bolder; font-size: large;">
+						Welcome {{ user.username }}
+
+						<form method="post" action="{% url 'mynews:user_logout' %}">
+							{% csrf_token %}
+							<button class="btn btn-default" type="submit" value="Logout"  style="color: aqua;">Log out</button>
+						</form>
+					</div>
+
+					{% else %}
+					<ul class="nav navbar-nav">
+						<li class="active"><a style="color: aqua; font-weight: bolder;" class="navbar-brand" href="{% url 'mynews:index' %}">TP Partners</a></li>
+					</ul>
+
+					<div class="navbar-form navbar-right">
+						<a href="{% url 'mynews:login_view' %}" class="btn btn-blog outline-white pull-right">Log in</a>
+					</div>
+					{% endif %}
+				</div>
+			</div>
+		</nav>
+
+		<div class="container-fluid">
+			<div class="row">
+				<div class="col-sm-3 col-md-2 sidebar">
+					<ul class="nav nav-sidebar">
+						<li><a href="{% url 'mynews:today' %}">Today News <span class="sr-only">(current)</span></a></li>
+						<li><a href="{% url 'mynews:archive' %}">Archive</a></li>
+						<li><a href="{% url 'mynews:activity' %}">Activity</a></li>
+						<li><a href="{% url 'mynews:clipping' %}">Clipping</a></li>
+					</ul>
+				</div>
+				<div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
+					<!--           <h1 class="page-header">Dashboard</h1> -->
+
+					<div>{% block content %}{% endblock %}</div>
+
+				</div>
+			</div>
 		</div>
 	</div>
-</div>
+	<footer>
+		<div class="footer">
+			<div class="container">
+				<div class="row">
+					<div class="col-sm-4 col-md-4 footer-widget">
+						<h3>Statistics</h3>
 
+						<span>We can't compete with Mom! Her company is big and evil! </span>
 
-<script>
+						<div class="stats">
+							<div class="line">
+								<span class="counter">27</span> <span class="caption">Articles</span>
+							</div>
+							<div class="line">
+								<span class="counter">208</span> <span class="caption">Comments</span>
+							</div>
+							<div class="line">
+								<span class="counter">2</span> <span class="caption">Authors</span>
+							</div>
+						</div>
+					</div>
 
-var comment = " <div class='panel panel-default word-break' news_data='" + {{news.id}} + "' comment_data='" + {{comment.id}} +"'><div class='panel-body' style='margin-left: 10px; margin-right: 10px'>	<div><img src=' {{ STATIC_URL }}picture/" + {{comment.publisher_text}} + ".jpg ' width='50' height='50'> <span style='color: navy; font-weight: bold;'>" + {{comment.publisher_text}} + "</span></div><div><div class='comment-text' id='tempid'>" + {{comment.comment_text|urlize|linebreaks}} + "</div></div>	<div style='font-size: x-small;'><span class='comment-pub-date'>" + {{comment.pub_date}} + "</span> <span class='float-right' style='margin-left: 10px'><a href='#' class='comment-delete'>Delete</a></span> <span class='float-right'><a href='#' class='comment-edit' style='font-size:'>Edit</a></span></div></div></div>  "
+					<div class="col-sm-4 col-md-4 footer-widget">
+						<h3>Recent posts</h3>
+						<div class="post-recent-widget">
+							<div class="row">
+								<div class="col-sm-12">
+									<div class="media">
+										<!-- 										<a class="pull-left" href="post-video.html"><img class="media-object" src="img/img2.jpg" width="80" alt=""></a> -->
+										<div class="media-body">
+											<h4 class="media-heading">
+												<a href="post-video.html">But I've never been to the moon!</a>
+											</h4>
+											<p class="post-date">may 10, 2014</p>
+										</div>
+									</div>
+									<div class="media">
+										<!-- 										<a class="pull-left" href="post-typography.html"><img class="media-object" src="img/img1.jpg" width="80" alt=""></a> -->
+										<div class="media-body">
+											<h4 class="media-heading">
+												<a href="post-typography.html">We don't have a brig</a>
+											</h4>
+											<p class="post-date">september 27, 2014</p>
+										</div>
+									</div>
+									<div class="media">
+										<!-- 										<a class="pull-left" href="post-image.html"><img class="media-object" src="img/img3.jpg" width="80" alt=""></a> -->
+										<div class="media-body">
+											<h4 class="media-heading">
+												<a href="post-image.html">Every other day it's food, food, food.</a>
+											</h4>
+											<p class="post-date">april 2, 2014</p>
+										</div>
+									</div>
 
+								</div>
+							</div>
+						</div>
+					</div>
 
-////////////
-
-
-
-$('.pushpin').click(function() {
-	var $this = $(this);
-	var news_id = $this.parents('.col-md-8').attr('news-data');
-	
-	$this.toggle(function() {
-		$.ajax({
-			url: "/mynews/news_clip/",
-			type: "POST",
-			data: {
-				news_id: news_id,
-			},
-			datatype: "html",
-			succcess: function(data) {
-				alert("success");
-			},
-		}).done(function() {
-			$this.parents('.col-md-8').find('.glyphicon.glyphicon-pushpin.float-right').addClass("pushpin-red");
-		});
-	}, function() {
-		$.ajax({
-			url: "/mynews/news_clip_cancel/",
-			type: "POST",
-			data: {
-				news_id: news_id,
-			},
-			datatype: "html",
-			succcess: function(data) {
-				alert("success");
-			},
-		}).done(function() {
-			$this.removeClass('pushpin-red');
-		});
-	});
-});
-
-
-
-</script>
-
-<div></div>
-
-
-
-
+					<div class="col-sm-4 col-md-4 footer-widget clearfix">
+						<h3>Tags</h3>
+						<ul class="tags">
+							<li><a href="#">OpenPGP</a></li>
+							<li><a href="#">Django</a></li>
+							<li><a href="#">Bitcoin</a></li>
+							<li><a href="#">Security</a></li>
+							<li><a href="#">GNU/Linux</a></li>
+							<li><a href="#">Git</a></li>
+							<li><a href="#">Homebrew</a></li>
+							<li><a href="#">Debian</a></li>
+						</ul>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="copyright">
+			<div class="container">
+				<p class="pull-left">
+					&copy; <a href="http://http://www.tppartners.co.kr/">TP Partners.</a>
+				</p>
+			</div>
+		</div>
+	</footer>
+</body>
+</html>
