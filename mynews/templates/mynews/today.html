@@ -5,43 +5,43 @@
 <script type="text/javascript">
 $(document).ready(function(){
 	
-// 	comment EDIT
-	$(document).on('click', '.comment-edit', function(){
-		var $parent = $(this).parent().parent().parent();
-		var submit = "<a class='comment-submit'>submit</a>";
-		var cancel = "<a class='comment-cancel'>cancel</a>";
+// // 	comment EDIT
+// 	$(document).on('click', '.comment-edit', function(){
+// 		var $parent = $(this).parent().parent().parent();
+// 		var submit = "<a class='comment-submit'>submit</a>";
+// 		var cancel = "<a class='comment-cancel'>cancel</a>";
 		
-		$parent.find(".comment-text").html('<textarea class="form-control"  name="comment_text">' + $(this).parent().parent().parent().find(".comment-text").text() + '</textarea>');
-		$parent.find(".comment-delete").hide();
+// 		$parent.find(".comment-text").html('<textarea class="form-control"  name="comment_text">' + $(this).parent().parent().parent().find(".comment-text").text() + '</textarea>');
+// 		$parent.find(".comment-delete").hide();
 		
-		$parent.find(".comment-edit").hide();
-		$parent.find(".comment-pub-date").append(submit);
-		$parent.find(".comment-submit").addClass("up");
+// 		$parent.find(".comment-edit").hide();
+// 		$parent.find(".comment-pub-date").append(submit);
+// 		$parent.find(".comment-submit").addClass("up");
 
-		$parent.find(".comment-submit").click(function(){
-			var $this = $(this);
-			var edit_comment_text = $this.parents('.panel-body').find('.form-control').val();
+// 		$parent.find(".comment-submit").click(function(){
+// 			var $this = $(this);
+// 			var edit_comment_text = $this.parents('.panel-body').find('.form-control').val();
 			
-			$.ajax({
-				url: "/mynews/comment_edit/",
-				type: "POST",
-				data: {
-					news_id: $this.parents('.panel.panel-default.word-break').attr("news_data"),
-					comment_id: $this.parents('.panel.panel-default.word-break').attr("comment_data"),
-					edit_comment_text: edit_comment_text,
-				},
-				datatype: "HTML",
-				success: function(data) {
-	 				$parent.find(".comment-text").html("<p>" + data + "</p>");
-				},
-			}).done(function() {
-				$this.parents('.panel-body').find('.comment-edit').show();
-				$this.parents('.panel-body').find('.comment-delete').show();
-				$this.parents('.panel-body').find('.comment-submit').remove();
-			});
-		});
+// 			$.ajax({
+// 				url: "/mynews/comment_edit/",
+// 				type: "POST",
+// 				data: {
+// 					news_id: $this.parents('.panel.panel-default.word-break').attr("news_data"),
+// 					comment_id: $this.parents('.panel.panel-default.word-break').attr("comment_data"),
+// 					edit_comment_text: edit_comment_text,
+// 				},
+// 				datatype: "HTML",
+// 				success: function(data) {
+// 	 				$parent.find(".comment-text").html("<p>" + data + "</p>");
+// 				},
+// 			}).done(function() {
+// 				$this.parents('.panel-body').find('.comment-edit').show();
+// 				$this.parents('.panel-body').find('.comment-delete').show();
+// 				$this.parents('.panel-body').find('.comment-submit').remove();
+// 			});
+// 		});
 		
-	});
+// 	});
 	
 // 	comment POST
 	$('.btn.btn-default').click(function() {
