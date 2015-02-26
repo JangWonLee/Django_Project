@@ -1,5 +1,17 @@
+/*---------------------test----------------------------*/
+.ng-valid {
+	border-color: red;
+}
+
 
 /* --------------------jangwon------------------------ */
+#pagination li{
+	border-right: 1px solid #ffffff; 
+  width:260px; 
+  display: inline; 
+  list-style-type: none;
+}
+
 #floater {
 	float: right;
 	height: 50%;

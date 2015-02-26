@@ -1,6 +1,7 @@
 from datetime import datetime, timedelta, time
 import json
 
+from django.core import serializers
 from django import forms
 from django.contrib.auth import authenticate, login, logout
 from django.core.files.images import get_image_dimensions
@@ -37,6 +38,16 @@ def activity(request):
 
 def clipping(request):
     clipping_list = request.user.clippings.all().order_by('-pub_date')
+    
+    #Pagination
+    paginator = Paginator(clipping_list, 10)
+    page = request.GET.get('page')
+    try:
+        clipping_list = paginator.page(page)
+    except PageNotAnInteger:
+        clipping_list = paginator.page(1)
+    except EmptyPage:
+        clipping_list = paginator.page(paginator.num_pages)
     
     return render(request, 'mynews/clipping.html', {'clipping_list': clipping_list})
 
@@ -106,12 +117,19 @@ def detail(request, news_id):
     comment_list = Comments.objects.filter(news=news)
     comment_list_count = comment_list.count()
     print(comment_list) 
+    
+    json_news = serializers.serialize('json', [news])
+    json_comment_list = serializers.serialize('json', comment_list)
+    
+    json_obj = json.dumps({"news": json_news, "comment_list": json_comment_list, "comment_list_count": comment_list_count})
+    
+    return render(request, '{% static "mynews/js/detail.controller.js" %}', json_obj)
     return render(request, 'mynews/detail.html', {'news': news, 'comment_list':comment_list, 'comment_list_count': comment_list_count})
     
 
 
 def login_view(request):
-    print(111111111)
+    print("login_view call")
     if request.method == 'POST':
         print(22222222)
         username = request.POST.get('username', False)
@@ -141,11 +159,14 @@ def user_logout(request):
 
 @csrf_exempt
 def comment_post(request):
+    print("comment_post call")
     
-    if request.method == 'POST' and request.is_ajax():
-        print("comment_post call")
-        news_id = request.POST.get('news_id', False)
-        comment_text = request.POST['comment_text']
+    if request.method == 'POST':
+        
+        data = json.loads(request.body.decode("utf-8"))
+        
+        news_id = data.get('news_id')
+        comment_text = data.get('comment_text')
         
         publisher_text = request.user.username
         pub_date = datetime.now()
@@ -172,25 +193,22 @@ def comment_post(request):
 def comment_delete(request):
     print("comment_delete call")
     
-    if request.method == 'POST' and request.is_ajax():
-        news_id = request.POST.get('news_id', False)
-        comment_id = request.POST['comment_id']
+    if request.method == 'POST':
+        data = json.loads(request.body.decode("utf-8"))
+        
+        news_id = data.get('news_id', False)
+        comment_id = data.get('comment_id')
         
         news = News.objects.get(pk=news_id)
         comment = Comments.objects.get(pk=comment_id)
         
-        print(news_id)
-        print(comment_id)
-        print(news)
-        print(comment)
-        
-        
         #signal/ tag3 = delete
         comments_done.send(sender=None, publisher_text=request.user.username, title_text=news.title_text, pub_date=datetime.now(), comment_text=comment.comment_text, tag='3')
-        
         comment.delete()
         
-        return HttpResponse("comment_delete success")
+        json_obj = json.dumps({"comment_id": comment_id})
+        
+        return HttpResponse(json_obj, content_type="application/json")
     else:
         return HttpResponse("comment_delete fail")
     
@@ -231,12 +249,13 @@ def comment_edit(request):
 def news_clip(request):
     print("news_clip call")
     
-    if request.method == 'POST' and request.is_ajax():
-        print("news_clip ajax")
+    if request.method == 'POST':
         
         user = request.user
         pub_date = datetime.now()
-        news_id = request.POST['news_id']
+        
+        data = json.loads(request.body.decode("utf-8"))
+        news_id = data.get('news_id')
         
         news = News.objects.get(pk=news_id)
         
@@ -251,9 +270,12 @@ def news_clip(request):
 def news_clip_cancel(request):
     print("news_clip_cancel call")
     
-    if request.method == 'POST' and request.is_ajax():
+    if request.method == 'POST':
+        
         user = request.user
-        news_id = request.POST['news_id']
+        
+        data = json.loads(request.body.decode("utf-8"))
+        news_id = data.get('news_id')
         news = News.objects.get(pk=news_id)
         
         c = Clippings.objects.filter(news=news, user=user)

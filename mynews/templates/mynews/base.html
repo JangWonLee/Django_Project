@@ -1,6 +1,7 @@
 {% load staticfiles %}
 <!DOCTYPE html>
-<html lang="en">
+<html ng-app="app">
+
 <head>
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -8,9 +9,15 @@
 <meta name="description" content="">
 <meta name="author" content="">
 
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
-<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.3.13/angular.min.js"></script>
+<!-- Angular Controller -->
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.3.14/angular.js"></script>
 
+<!-- Angular .js -->
+<script src="{% static 'mynews/js/module.js' %}"></script>
+<script src="{% static 'mynews/js/detail.controller.js' %}"></script>
+
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
 <script type="text/javascript" src="{% static 'mynews/js/ajax_csrf.js' %}"></script>
 
 <!-- Bootstrap core CSS -->
@@ -32,10 +39,10 @@
 <link href="http://fonts.googleapis.com/css?family=Open+Sans:400,300,700|Merriweather:400,400italic,700italic" rel="stylesheet" type="text/css" />
 
 <!-- KeyLime -->
-<!-- <link rel="stylesheet" href="{% static 'keylime/css/bootstrap.min.css' %}"/> -->
 <link rel="stylesheet" href="{% static 'keylime/css/style.css' %}" />
 <link rel="stylesheet" href="{% static 'keylime/css/icons.css' %}" />
 <link rel="stylesheet" href="{% static 'keylime/css/animate.min.css' %}" />
+
 
 
 <title>{% block title %}TP PARTNERS{% endblock %}</title>

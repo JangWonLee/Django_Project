@@ -1,87 +1,91 @@
-{% extends "mynews/base.html" %} 
-{% block title %}TP_PARTNERS{% endblock %}
-
-{% block content %}
+{% extends "mynews/base.html" %} {% block title %}TP_PARTNERS{% endblock %} {% block content %}
 <script type="text/javascript">
+	// $(document).ready(function() {
 
-// $(document).ready(function() {
-	
-// 	$('#btn-search').click(function() { 
-// 		$this = $(this);
-		
-// 		alert($this.parents('.col-md-8').find('.form-control-search').val());
-		
-// 		$.ajax({ 
-// 			url: "/mynews/news_search/",
-// 			type: "post",
-// 			data: {
-// 				search_text: $this.parents('.col-md-8').find('.form-control-search').val(),
-// 			},
-// 			success: function(data) {
-// 				console.log("success");
-// 			},
-// 		});
-// 	});
-// });
+	// 	$('#btn-search').click(function() { 
+	// 		$this = $(this);
 
+	// 		alert($this.parents('.col-md-8').find('.form-control-search').val());
+
+	// 		$.ajax({ 
+	// 			url: "/mynews/news_search/",
+	// 			type: "post",
+	// 			data: {
+	// 				search_text: $this.parents('.col-md-8').find('.form-control-search').val(),
+	// 			},
+	// 			success: function(data) {
+	// 				console.log("success");
+	// 			},
+	// 		});
+	// 	});
+	// });
 </script>
 
 <div class="col-sm-1"></div>
 <div class="col-md-8">
-		<header>
-			<h1>Archive</h1>
-		</header><br />
-		{% if archive_news %}
-		<table cellspacing="0" cellpadding="0" class="table table-striped" >
-			<thead>
-				<tr>
-					<th scope="col" style="width: 63%">Title</th>
-					<th scope="col" style="width: 29%">Reg.date</th>
-					<th scope="col" style="width: 8%">Comments</th>
-				</tr>
-			</thead>
-			
-			<tbody>
+	<header>
+		<h1>Archive</h1>
+	</header>
+	<br /> 
+	{% if archive_news %}
+	<table cellspacing="0" cellpadding="0" class="table table-striped">
+		<thead>
+			<tr>
+				<th scope="col" style="width: 63%">Title</th>
+				<th scope="col" style="width: 29%">Reg.date</th>
+				<th scope="col" style="width: 8%">Comments</th>
+			</tr>
+		</thead>
+
+		<tbody>
 			<!-- 모든뉴스 -->
 			{% for news in archive_news %}
-				<tr>
-					<td scope="row"><a href="{% url 'mynews:detail' news.id %}">{{ news.title_text }}</a></td>
-					<td>{{news.pub_date}}</td>
-					<td align="center">{{news.comment_count}}</td>
-				</tr>
+			<tr>
+				<td scope="row"><a href="{% url 'mynews:detail' news.id %}">{{ news.title_text }}</a></td>
+				<td>{{news.pub_date}}</td>
+				<td align="center">{{news.comment_count}}</td>
+			</tr>
 			{% endfor %}
-			</tbody>
-		</table>
-		
-		<!-- search form -->
-		<div>
-			<form method="post" action="{% url 'mynews:news_search' %}">
-			{% csrf_token %}
-			 	<span><input type="text" class="form-control-search" name="search-text" placeholder="">
+		</tbody>
+	</table>
+
+	<!-- search form -->
+	<div>
+		<form method="post" action="{% url 'mynews:news_search' %}">
+			{% csrf_token %} <span><input type="text" class="form-control-search" name="search-text" placeholder="">
 				<button type="submit" id="btn-search" class="form-group btn btn-default">Search</button></span>
-			</form>
-		</div>
-		<!-- 페이지네이션 -->
-		<div class="pagination" align="center">
-		    <span class="step-links">
-		        {% if archive_news.has_previous %}
-	            <a href="?page={{ archive_news.previous_page_number }}">previous</a>
-		        {% endif %}
-					
-		        <span class="current">
-		            Page {{ archive_news.number }} of {{ news.paginator.num_pages }}.
-		        </span>
-					
-		        {% if archive_news.has_next %}
-		            <a href="?page={{ archive_news.next_page_number }}">next</a>
-		        {% endif %}
-		    </span>
-					
-		</div>
+		</form>
+	</div>
 	
-		{% else %}
-			<p>No News. Something wrong..</p>
-		{% endif %}
+	<!-- pagination -->
+	<div class="pagination">
+		<span>
+			<ul id="pagination">
+				{% if archive_news.has_previous %}
+				<li><a href="?page={{ archive_news.previous_page_number }}">prev</a></li>
+				{% endif %}
+			
+				<span> 
+				{% for page_number in archive_news.paginator.page_range %}
+				
+					{% ifequal page_number archive_news.number %}
+					<li style="font-weight: bolder; font-size: large; color: green;">{{page_number}}</li> 
+					{% else %}
+					<li><a href="?page={{page_number}}">{{page_number}}</a></li> 
+					{% endifequal %} 
+				{% endfor %} 
+					
+					<!-- 		            Page {{ archive_news.number }} of {{ archive_news.paginator.num_pages }}. -->
+				</span> {% if archive_news.has_next %}
+				<li><a href="?page={{ archive_news.next_page_number }}">next</a></li> {% endif %}
+			</ul>
+		</span>
+	</div>
+
+
+	{% else %}
+	<p>No News. Something wrong..</p>
+	{% endif %}
 
 </div>
 {% endblock %}

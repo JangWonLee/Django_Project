@@ -30,14 +30,36 @@
 			{% endfor %}
 		</tbody>
 	</table>
-<!-- 	{{clipping_list}} -->
-<!-- 	{% for clippings in clipping_list %} -->
-<!-- 			{{clipping_list}} .first -->
-<!-- 			{% with news=clippings.news %} -->
-<!-- 			{{news}}.second -->
-<!-- 	{% endwith %} -->
-<!-- 			{% endfor %} -->
+	
+	<!-- pagination -->
+	{% if clipping_list.paginator.num_pages != 1 %}
+	<div class="pagination">
+		<span>
+			<ul id="pagination">
+				{% if clipping_list.has_previous %}
+				<li><a href="?page={{ clipping_list.previous_page_number }}">prev</a></li>
+				{% endif %}
+			
+				<span> 
+				{% for page_number in clipping_list.paginator.page_range %}
+				
+					{% ifequal page_number clipping_list.number %}
+					<li style="font-weight: bolder; font-size: large; color: green;">{{page_number}}</li> 
+					{% else %}
+					<li><a href="?page={{page_number}}">{{page_number}}</a></li> 
+					{% endifequal %} 
+				{% endfor %} 
+					
+					<!-- 		            Page {{ archive_news.number }} of {{ archive_news.paginator.num_pages }}. -->
+				</span> {% if clipping_list.has_next %}
+				<li><a href="?page={{ clipping_list.next_page_number }}">next</a></li> {% endif %}
+			</ul>
+		</span>
+	</div>
 	{% endif %}
+	{% endif %}
+	
+	
 	
 </div>
 {% endblock %}

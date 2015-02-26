@@ -34,6 +34,37 @@
 		{% endfor %}
 	{% endif %}
 	
+	<!-- pagination -->
+	{% if activity_list.paginator.num_pages != 1 %}
+	<div class="pagination">
+		<span>
+			<ul id="pagination">
+				{% if clipping_list.has_previous %}
+				<li><a href="?page={{ activity_list.previous_page_number }}">prev</a></li>
+				{% endif %}
+			
+				<span> 
+				{% for page_number in activity_list.paginator.page_range %}
+				
+					{% ifequal page_number activity_list.number %}
+					<li style="font-weight: bolder; font-size: large; color: green;">{{page_number}}</li> 
+					{% else %}
+					<li><a href="?page={{page_number}}">{{page_number}}</a></li> 
+					{% endifequal %} 
+				{% endfor %} 
+					
+				</span> 
+				{% if clipping_list.has_next %}
+				<li><a href="?page={{ activity_list.next_page_number }}">next</a></li> 
+				{% endif %}
+			</ul>
+		</span>
+	</div>
+	{% endif %}
+	
+	
+	
+	
 	<div class="pagination" align="center">
 	    <span class="step-links">
 	        {% if activity_list.has_previous %}
@@ -48,7 +79,6 @@
 	            <a href="?page={{ activity_list.next_page_number }}">next</a>
 	        {% endif %}
 	    </span>
-				
 	</div>
 	
 </div>
