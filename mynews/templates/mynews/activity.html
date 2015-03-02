@@ -2,84 +2,106 @@
 {% block title %}TP_NEWS{% endblock %}
 {% block content %}
 
-<div class="col-sm-1"></div>
-<div class="col-md-8">
+<!-- <div class="col-md-8 col-md-offset-1" ng-controller="ActivityController as vm" ng-init="initActivityView( {{activity_list}} )"> -->
+<div class="col-md-8 col-md-offset-1" ng-controller="ActivityController as vm" ng-init="vm.initActivityView()">
 	<header>
 		<h1>Activities</h1>
 	</header>
-	
 	<br />
-	 
-	{% if activity_list %}
-	 
-		{% for activity in activity_list %}
-		<div class="panel panel-default word-break">
+	
+	<div ng-show="vm.activityList != null">
+		<div ng-repeat="activity in vm.activityList | offset : vm.currentPage * vm.activityListPerPage | limitTo : vm.activityListPerPage" class="panel panel-default word-break">
 			<div class="panel-body">
 				<div>
-					<div align="right" style="font-size: x-small;">{{activity.pub_date}}</div>
-					<img src=" {{ STATIC_URL }}picture/{{activity.publisher_text}}.jpg " width="50" height="50"> 
-				{% if activity.tag == '1' %}
-					<b>{{activity.publisher_text}}</b> commented on "{{activity.title_text}}".
-				{% endif %}
-				{% if activity.tag == '2' %}
-					<b>{{activity.publisher_text}}</b> edited the comment.
-				{% endif %}
-				{% if activity.tag == '3' %}
-					<b>{{activity.publisher_text}}</b> deleted the comment.
-				{% endif %}
+					<div align="right" style="font-size: x-small;">{$ activity.pub_date $}</div>
+					<img src=" {{ STATIC_URL }}picture/{$ activity.publisher_text $}.jpg " width="50" height="50"> 
+					<div ng-show = "activity.tag == 1"><b>{$ activity.publisher_text $}</b> commented on "{$ activity.title_text $}".</div>
+					<div ng-show = "activity.tag == 2"><b>{$ activity.publisher_text $}</b> edited the comment.</div>
+					<div ng-show = "activity.tag == 3"><b>{$ activity.publisher_text $}</b> deleted the comment.</div>
 				</div>
 			</div>
-			<div class="panel-footer">{{activity.comment_text|urlize|escape|linebreaks}}</div>
+			<div class="panel-footer">{$ activity.comment_text $}</div>
 		</div>
-		{% endfor %}
-	{% endif %}
-	
-	<!-- pagination -->
-	{% if activity_list.paginator.num_pages != 1 %}
-	<div class="pagination">
-		<span>
-			<ul id="pagination">
-				{% if clipping_list.has_previous %}
-				<li><a href="?page={{ activity_list.previous_page_number }}">prev</a></li>
-				{% endif %}
+		
+		<div class="pagination"> 
+       		<ul>
+	        	<li ng-class="vm.prevPageDisabled()">
+	        		<a href ng-click="vm.prevPage()">« Prev</a>
+	        	</li>
+	        	<li ng-repeat="n in vm.range()" ng-class="{active: n == vm.currentPage}" ng-click="vm.setPage(n)">
+	        		<a href="#">{$ n+1 $}</a>
+	        	</li>
+	        	<li ng-class="vm.nextPageDisabled()">
+	        		<a href ng-click="vm.nextPage()">Next »</a>
+	        	</li>
+	        </ul>
+        </div>
+		
+	</div>
+	 
+<!-- 	pagination  -->
+<!-- 	{% if activity_list.paginator.num_pages != 1 %} -->
+<!-- 	<div class="pagination"> -->
+<!-- 		<span> -->
+<!-- 			<ul id="pagination"> -->
+<!-- 				{% if clipping_list.has_previous %} -->
+<!-- 				<li><a href="?page={{ activity_list.previous_page_number }}">prev</a></li> -->
+<!-- 				{% endif %} -->
 			
-				<span> 
-				{% for page_number in activity_list.paginator.page_range %}
+<!-- 				<span>  -->
+<!-- 				{% for page_number in activity_list.paginator.page_range %} -->
 				
-					{% ifequal page_number activity_list.number %}
-					<li style="font-weight: bolder; font-size: large; color: green;">{{page_number}}</li> 
-					{% else %}
-					<li><a href="?page={{page_number}}">{{page_number}}</a></li> 
-					{% endifequal %} 
-				{% endfor %} 
+<!-- 					{% ifequal page_number activity_list.number %} -->
+<!-- 					<li style="font-weight: bolder; font-size: large; color: green;">{{page_number}}</li>  -->
+<!-- 					{% else %} -->
+<!-- 					<li><a href="?page={{page_number}}">{{page_number}}</a></li>  -->
+<!-- 					{% endifequal %}  -->
+<!-- 				{% endfor %}  -->
 					
-				</span> 
-				{% if clipping_list.has_next %}
-				<li><a href="?page={{ activity_list.next_page_number }}">next</a></li> 
-				{% endif %}
-			</ul>
-		</span>
-	</div>
-	{% endif %}
+<!-- 				</span>  -->
+<!-- 				{% if clipping_list.has_next %} -->
+<!-- 				<li><a href="?page={{ activity_list.next_page_number }}">next</a></li>  -->
+<!-- 				{% endif %} -->
+<!-- 			</ul> -->
+<!-- 		</span> -->
+<!-- 	</div> -->
+<!-- 	{% endif %} -->
 	
-	
-	
-	
-	<div class="pagination" align="center">
-	    <span class="step-links">
-	        {% if activity_list.has_previous %}
-	        	<a href="?page={{ activity_list.previous_page_number }}">previous</a>
-	        {% endif %}
-				
-	        <span class="current">
-	            Page {{ activity_list.number }} of {{ news.paginator.num_pages }}.
-	        </span>
-				
-	        {% if activity_list.has_next %}
-	            <a href="?page={{ activity_list.next_page_number }}">next</a>
-	        {% endif %}
-	    </span>
-	</div>
+<!--   <div ng-controller="PaginationCtrl"> -->
+<!--     <table class="table table-striped"> -->
+<!--       <thead> -->
+<!--         <tr> -->
+<!--           <th>Id</th> -->
+<!--           <th>Name</th> -->
+<!--           <th>Description</th> -->
+<!--         </tr> -->
+<!--       </thead> -->
+<!--       <tbody> -->
+<!--         <tr ng-repeat="item in items | offset: currentPage*itemsPerPage | limitTo: itemsPerPage"> -->
+<!--           <td>{{item.id}}</td> -->
+<!--           <td>{{item.name}}</td> -->
+<!--           <td>{{item.description}}</td> -->
+<!--         </tr> -->
+<!--       </tbody> -->
+<!--       <tfoot> -->
+<!--         <td colspan="3"> -->
+<!--           <div class="pagination"> -->
+<!--             <ul> -->
+<!--               <li ng-class="prevPageDisabled()"> -->
+<!--                 <a href ng-click="prevPage()">« Prev</a> -->
+<!--               </li> -->
+<!--               <li ng-repeat="n in range()" ng-class="{active: n == currentPage}" ng-click="setPage(n)"> -->
+<!--                 <a href="#">{$n+1 $}</a> -->
+<!--               </li> -->
+<!--               <li ng-class="nextPageDisabled()"> -->
+<!--                 <a href ng-click="nextPage()">Next »</a> -->
+<!--               </li> -->
+<!--             </ul> -->
+<!--           </div> -->
+<!--         </td> -->
+<!--       </tfoot> -->
+<!--     </table> -->
+<!--   </div> -->
 	
 </div>
 

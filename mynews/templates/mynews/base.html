@@ -15,6 +15,8 @@
 <!-- Angular .js -->
 <script src="{% static 'mynews/js/module.js' %}"></script>
 <script src="{% static 'mynews/js/detail.controller.js' %}"></script>
+<script src="{% static 'mynews/js/activity.controller.js' %}"></script>
+<script src="{% static 'mynews/js/pagination.controller.js' %}"></script>
 
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
@@ -60,12 +62,12 @@
 						<span class="sr-only">Toggle navigation</span> <span class="icon-bar"></span> <span class="icon-bar"></span> <span class="icon-bar"></span>
 					</button>
 					<a class="navbar-brand" href="{% url 'mynews:index' %}">&nbsp;&nbsp;TP PARTNERS </a> {% if user.is_authenticated %}
-
-					<div align="right" style="color: aqua; font-weight: bolder; font-size: large;">
-						Welcome {{ user.username }}
+					
+					<div align="right" style="color: aqua; font-weight: bolder; font-size: medium;">
+						<span style="display: inline-block; margin-top: 15px">Welcome {{ user.username }}</span>
 						<form class="navbar-form navbar-right" method="post" action="{% url 'mynews:user_logout' %}">
 							{% csrf_token %}
-							<button class="btn btn-link" type="submit" value="Logout" style="color: aqua;">Log out</button>
+							<button class="btn btn-blog outline-white pull-right" type="submit" value="Logout" style="color: aqua;">Log out</button>
 						</form>
 					</div>
 
@@ -75,7 +77,7 @@
 			</div>
 		</nav>
 
-		<div class="container-fluid">
+<!-- 		<div class="container-fluid"> -->
 			<div class="row">
 				<div class="col-sm-3 col-md-2 sidebar">
 					<ul class="nav nav-sidebar">
@@ -84,6 +86,7 @@
 						<li><a href="{% url 'mynews:activity' %}">Activity</a></li>
 						<li><a href="{% url 'mynews:clipping' %}">Clipping</a></li>
 						<li><a href="{% url 'mynews:test' %}">TEST</a></li>
+						<li class="copy-right">hihihihi</li>
 					</ul>
 				</div>
 				<div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
@@ -93,7 +96,7 @@
 
 				</div>
 			</div>
-		</div>
+<!-- 		</div> -->
 	</div>
 	<footer>
 		<div class="footer">
@@ -122,7 +125,7 @@
 						<div class="row">
 							<div class="col-sm-12">
 								<div class="media">
-									<!-- 										<a class="pull-left" href="post-video.html"><img class="media-object" src="img/img2.jpg" width="80" alt=""></a> -->
+																			<a class="pull-left" href="post-video.html"><img class="media-object" src="img/img2.jpg" width="80" alt=""></a>
 									<div class="media-body">
 										<h4 class="media-heading">
 											<a href="post-video.html">But I've never been to the moon!</a>
@@ -131,7 +134,7 @@
 									</div>
 								</div>
 								<div class="media">
-									<!-- 										<a class="pull-left" href="post-typography.html"><img class="media-object" src="img/img1.jpg" width="80" alt=""></a> -->
+																			<a class="pull-left" href="post-typography.html"><img class="media-object" src="img/img1.jpg" width="80" alt=""></a>
 									<div class="media-body">
 										<h4 class="media-heading">
 											<a href="post-typography.html">We don't have a brig</a>
@@ -140,7 +143,7 @@
 									</div>
 								</div>
 								<div class="media">
-									<!-- 										<a class="pull-left" href="post-image.html"><img class="media-object" src="img/img3.jpg" width="80" alt=""></a> -->
+																			<a class="pull-left" href="post-image.html"><img class="media-object" src="img/img3.jpg" width="80" alt=""></a>
 									<div class="media-body">
 										<h4 class="media-heading">
 											<a href="post-image.html">Every other day it's food, food, food.</a>

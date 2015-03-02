@@ -1,11 +1,12 @@
 from datetime import datetime, timedelta, time
 import json
 
-from django.core import serializers
 from django import forms
 from django.contrib.auth import authenticate, login, logout
+from django.core import serializers
 from django.core.files.images import get_image_dimensions
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
+from django.core.serializers.json import DjangoJSONEncoder
 from django.db.models.query_utils import Q
 from django.dispatch import Signal
 from django.http import response
@@ -22,19 +23,34 @@ from mynews.signals import comments_done
 def index(request):
     return render(request, 'mynews/index.html')
 
+
+@csrf_exempt
 def activity(request):
+    print("acitivy call")
     activity_list = Activities.objects.all().order_by('-pub_date')
     
-    paginator = Paginator(activity_list, 10)
-    page = request.GET.get('page')
-    try:
-        activity_list = paginator.page(page)
-    except PageNotAnInteger:
-        activity_list = paginator.page(1)
-    except EmptyPage:
-        activity_list = paginator.page(paginator.num_pages)
+    activity_list_dict = []
+    if request.method == 'POST':
+        for activity in activity_list:
+            activity_list_dict.append(as_dict_activity(activity))
+            
+        json_obj = json.dumps({"activity_list": activity_list_dict})
+        print(json_obj)
+        print("activity request call")
+        return HttpResponse(json_obj, content_type="application/json")
     
-    return render(request, 'mynews/activity.html', {'activity_list': activity_list})
+    else:    
+        paginator = Paginator(activity_list, 10)
+        page = request.GET.get('page')
+        try:
+            activity_list = paginator.page(page)
+        except PageNotAnInteger:
+            activity_list = paginator.page(1)
+        except EmptyPage:
+            activity_list = paginator.page(paginator.num_pages)
+        
+        print("activity render call")
+        return render(request, 'mynews/activity.html', {'activity_list': activity_list})
 
 def clipping(request):
     clipping_list = request.user.clippings.all().order_by('-pub_date')
@@ -92,39 +108,64 @@ def archive(request):
     
     return render(request, 'mynews/archive.html', {"archive_news": archive_news})
 
+def as_dict_activity(activity):
+    return {
+            "publisher_text": activity.publisher_text,
+            "title_text": activity.title_text,
+            "comment_text": activity.comment_text,
+            "pub_date": activity.pub_date.strftime("%Y-%m-%d %H:%M:%S"),
+            "tag": activity.tag
+    }
 
+def as_dict_comment(comment):
+    return {
+            "publisher_text": comment.publisher_text,
+            "comment_id": comment.id,
+            "news_id": comment.news_id,
+            "pub_date": comment.pub_date.strftime("%Y-%m-%d %H:%M:%S"),
+           "comment_text": comment.comment_text
+    }
+    
+def as_dict_news(news):
+    return {
+            "news_id": news.id,
+            "opinion_text": news.opinion_text,
+            "link_text": news.link_text,
+            "is_clipped_by_me": news.is_clipped_by_me,
+            "summary_text": news.summary_text,
+            "title_text": news.title_text,
+            "pub_date": news.pub_date.strftime("%Y-%m-%d %H:%M:%S"),
+    }    
+
+@csrf_exempt
 def detail(request, news_id):
     #news_id를 갖는 News 불러와
     news = get_object_or_404(News, pk=news_id)
     
     news.is_clipped_by_me = request.user.clippings.filter(news=news).exists()
     
-    #Comment를 Post 했을 경우
-    if request.method == 'POST':
-        #print(request.POST['text'])
-        comment_text = request.POST.get("comment_text", False)
-        publisher_text = request.user.username
-        pub_date = datetime.now()
-        
-        #signal / tag 1 = commnet
-        comments_done.send(sender=None, publisher_text=publisher_text, title_text=news.title_text, pub_date=pub_date, comment_text=comment_text, tag='1')
-        print("detail-signal call")
-        
-        #db 객체만듬
-        c = Comments(news=news, comment_text=comment_text, publisher_text=publisher_text, pub_date=pub_date)
-        c.save()
-        
     comment_list = Comments.objects.filter(news=news)
     comment_list_count = comment_list.count()
-    print(comment_list) 
     
-    json_news = serializers.serialize('json', [news])
-    json_comment_list = serializers.serialize('json', comment_list)
+    print(comment_list)
     
-    json_obj = json.dumps({"news": json_news, "comment_list": json_comment_list, "comment_list_count": comment_list_count})
-    
-    return render(request, '{% static "mynews/js/detail.controller.js" %}', json_obj)
-    return render(request, 'mynews/detail.html', {'news': news, 'comment_list':comment_list, 'comment_list_count': comment_list_count})
+    if request.method == 'POST':
+        print("request")
+        
+        comment_list_dict = []
+        for comment in comment_list:
+            comment_list_dict.append(as_dict_comment(comment))
+            
+        news_dict = []
+        news_dict = as_dict_news(news)
+        
+        json_obj = json.dumps({"news": news_dict, "comment_list_count": comment_list_count, "comment_list": comment_list_dict })
+        
+        print("detail request call")
+        return HttpResponse(json_obj, content_type="application/json")
+    else:
+        print("detail render call")
+        return render(request, 'mynews/detail.html', {'news': news, 'comment_list':comment_list, 'comment_list_count': comment_list_count})
     
 
 
@@ -219,15 +260,12 @@ def comment_delete(request):
 def comment_edit(request):
     print("comment_edit call")
     
-    if request.method == 'POST' and request.is_ajax():
-        news_id = request.POST.get('news_id', False)
-        comment_id = request.POST.get('comment_id', False)
+    if request.method == 'POST':
+        data = json.loads(request.body.decode("utf-8"))
+        news_id = data.get('news_id', False)
+        comment_id = data.get('comment_id', False)
+        edit_comment_text = data.get('edit_text', False)
         
-        print(comment_id)
-        print(request.POST['edit_comment_text'])
-        print("comment->POST")
-        
-        edit_comment_text = request.POST['edit_comment_text']
         news = News.objects.get(pk=news_id)
 
         print(request.user.id)
