@@ -23,6 +23,12 @@
 	position: relative;
 }
 
+.ellipsis {
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+}
+
 .outer {
   display: table;
   width: 70%;

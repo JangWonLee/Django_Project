@@ -2,7 +2,6 @@
 {% block title %}TP_NEWS{% endblock %}
 {% block content %}
 
-<!-- <div class="col-md-8 col-md-offset-1" ng-controller="ActivityController as vm" ng-init="initActivityView( {{activity_list}} )"> -->
 <div class="col-md-8 col-md-offset-1" ng-controller="ActivityController as vm" ng-init="vm.initActivityView()">
 	<header>
 		<h1>Activities</h1>
@@ -23,86 +22,23 @@
 			<div class="panel-footer">{$ activity.comment_text $}</div>
 		</div>
 		
+		<!-- PAGINATION -->
 		<div class="pagination"> 
-       		<ul>
-	        	<li ng-class="vm.prevPageDisabled()">
+       		<ul id="pagination">
+	        	<li ng-show="vm.currentPage != 0" ng-class="vm.prevPageDisabled()">
 	        		<a href ng-click="vm.prevPage()">« Prev</a>
 	        	</li>
 	        	<li ng-repeat="n in vm.range()" ng-class="{active: n == vm.currentPage}" ng-click="vm.setPage(n)">
-	        		<a href="#">{$ n+1 $}</a>
+	        		<a ng-if="vm.currentPage == n" style="color: navy;" href="#">{$ n+1 $}</a>
+	        		<a ng-if="vm.currentPage != n" href="#">{$ n+1 $}</a>
 	        	</li>
-	        	<li ng-class="vm.nextPageDisabled()">
+	        	<li ng-show="vm.currentPage != vm.pageCount()" ng-class="vm.nextPageDisabled()">
 	        		<a href ng-click="vm.nextPage()">Next »</a>
 	        	</li>
 	        </ul>
         </div>
 		
 	</div>
-	 
-<!-- 	pagination  -->
-<!-- 	{% if activity_list.paginator.num_pages != 1 %} -->
-<!-- 	<div class="pagination"> -->
-<!-- 		<span> -->
-<!-- 			<ul id="pagination"> -->
-<!-- 				{% if clipping_list.has_previous %} -->
-<!-- 				<li><a href="?page={{ activity_list.previous_page_number }}">prev</a></li> -->
-<!-- 				{% endif %} -->
-			
-<!-- 				<span>  -->
-<!-- 				{% for page_number in activity_list.paginator.page_range %} -->
-				
-<!-- 					{% ifequal page_number activity_list.number %} -->
-<!-- 					<li style="font-weight: bolder; font-size: large; color: green;">{{page_number}}</li>  -->
-<!-- 					{% else %} -->
-<!-- 					<li><a href="?page={{page_number}}">{{page_number}}</a></li>  -->
-<!-- 					{% endifequal %}  -->
-<!-- 				{% endfor %}  -->
-					
-<!-- 				</span>  -->
-<!-- 				{% if clipping_list.has_next %} -->
-<!-- 				<li><a href="?page={{ activity_list.next_page_number }}">next</a></li>  -->
-<!-- 				{% endif %} -->
-<!-- 			</ul> -->
-<!-- 		</span> -->
-<!-- 	</div> -->
-<!-- 	{% endif %} -->
-	
-<!--   <div ng-controller="PaginationCtrl"> -->
-<!--     <table class="table table-striped"> -->
-<!--       <thead> -->
-<!--         <tr> -->
-<!--           <th>Id</th> -->
-<!--           <th>Name</th> -->
-<!--           <th>Description</th> -->
-<!--         </tr> -->
-<!--       </thead> -->
-<!--       <tbody> -->
-<!--         <tr ng-repeat="item in items | offset: currentPage*itemsPerPage | limitTo: itemsPerPage"> -->
-<!--           <td>{{item.id}}</td> -->
-<!--           <td>{{item.name}}</td> -->
-<!--           <td>{{item.description}}</td> -->
-<!--         </tr> -->
-<!--       </tbody> -->
-<!--       <tfoot> -->
-<!--         <td colspan="3"> -->
-<!--           <div class="pagination"> -->
-<!--             <ul> -->
-<!--               <li ng-class="prevPageDisabled()"> -->
-<!--                 <a href ng-click="prevPage()">« Prev</a> -->
-<!--               </li> -->
-<!--               <li ng-repeat="n in range()" ng-class="{active: n == currentPage}" ng-click="setPage(n)"> -->
-<!--                 <a href="#">{$n+1 $}</a> -->
-<!--               </li> -->
-<!--               <li ng-class="nextPageDisabled()"> -->
-<!--                 <a href ng-click="nextPage()">Next »</a> -->
-<!--               </li> -->
-<!--             </ul> -->
-<!--           </div> -->
-<!--         </td> -->
-<!--       </tfoot> -->
-<!--     </table> -->
-<!--   </div> -->
-	
 </div>
 
 {% endblock %}

@@ -1,20 +1,104 @@
 <style>
 .outer {
-  display: table;
-  width: 50%;
-  height: 100%;
+	display: table;
+	width: 50%;
+	height: 100%;
 }
+
 .inner {
-  display: table-cell;
-  vertical-align: middle;
-  text-align: right;
-  border: 1px solid;
+	display: table-cell;
+	vertical-align: middle;
+	text-align: right;
+	border: 1px solid;
 }
+
+input:enabled {
+	background-color: white;
+}
+
+input:disabled {
+	background-color: gray;
+}
+
+/* div p { */
+/* 	color: red; */
+/* } */
+
+/* div div { */
+/*   color: blue; */
+/* } */
+/* div div .hi { */
+/*   color: gray; */
+/* } */
+
+/* .a .b{ */
+/* 	color: red; */
+/* } */
+
+.a, .b {
+color: red;
+}
+
+.c {
+	color: blue;
+}
+
+.d .e {
+	color: gray;
+}
+
+.f {
+	color: red;
+}
+
+.g {
+	color: gray;
+}
+
+/* .g .f { */
+/* 	color: blue; */
+/* } */
+
+.g {
+	.f{
+		color: b
+	}
+}
+
 </style>
 
-<div class="outer">
-
-	<div class="inner">
-		Do you see it?
+<div class="a">
+	in a
+	<header class="b">
+	in bbb
+		<h1 class="c">in cc</h1>
+	</header>
+	<p>test</p>
+	<div>
+	hi
+		<div class="a">
+		hi in div
+		</div>
+	</div>
+	<div class="d">
+		hello
+		<p class="e">hello in p</p>
 	</div>
 </div>
+	
+	
+	<div class="g">
+		what
+		<div class="f">
+			is it
+		</div>		
+	</div>
+------------------------------------------
+<!-- <h1 class="a b">a</h1> -->
+<!-- <h1 class="b">b</h1> -->
+<!-- <h1 class="c">c</h1> -->
+<!-- <h1 class="d">d</h1> -->
+<!-- <h1 class="e">e</h1> -->
+
+
+

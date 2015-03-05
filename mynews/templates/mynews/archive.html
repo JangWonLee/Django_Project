@@ -1,31 +1,12 @@
 {% extends "mynews/base.html" %} {% block title %}TP_PARTNERS{% endblock %} {% block content %}
-<script type="text/javascript">
-	// $(document).ready(function() {
-
-	// 	$('#btn-search').click(function() { 
-	// 		$this = $(this);
-
-	// 		alert($this.parents('.col-md-8').find('.form-control-search').val());
-
-	// 		$.ajax({ 
-	// 			url: "/mynews/news_search/",
-	// 			type: "post",
-	// 			data: {
-	// 				search_text: $this.parents('.col-md-8').find('.form-control-search').val(),
-	// 			},
-	// 			success: function(data) {
-	// 				console.log("success");
-	// 			},
-	// 		});
-	// 	});
-	// });
-</script>
-
 <div class="col-sm-1"></div>
 <div class="col-md-8">
 	<header>
 		<h1>Archive</h1>
 	</header>
+	
+	<div style="float: right: ;">Test</div>
+	
 	<br /> 
 	{% if archive_news %}
 	<table cellspacing="0" cellpadding="0" class="table table-striped">
@@ -41,7 +22,7 @@
 			<!-- 모든뉴스 -->
 			{% for news in archive_news %}
 			<tr>
-				<td scope="row"><a href="{% url 'mynews:detail' news.id %}">{{ news.title_text }}</a></td>
+				<td scope="row" style="max-width: 541px" class="ellipsis"><a href="{% url 'mynews:detail' news.id %}">{{ news.title_text }}</a></td>
 				<td>{{news.pub_date}}</td>
 				<td align="center">{{news.comment_count}}</td>
 			</tr>

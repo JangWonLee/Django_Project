@@ -26,11 +26,14 @@
 				vm.activityList = data.activity_list;
 				console.log(vm.activityList.length);
 				vm.items = vm.activityList;
+				
+				var temp = 30;
+				console.log("parseint", parseInt(temp,10));
 			});
 		};
 		
 		/* PAGINATION */
-		vm.activityListPerPage = 5;
+		vm.activityListPerPage = 10;
 		vm.currentPage = 0;
 		vm.activityList = [];
 		
@@ -39,18 +42,20 @@
 			var ret = [];
 			var start;
 			
-			start = vm.currentPage;
+//			start = vm.currentPage;
+			start = parseInt(vm.currentPage/rangeSize)*rangeSize;
 			if(start > vm.pageCount() - rangeSize) {
 				start = vm.pageCount() - rangeSize + 1;
 			}
 			
-			for (var i = start; i < start; i++) {
+			for (var i = start; i < start+rangeSize; i++) {
 				ret.push(i);
 			}
 			return ret;
 		};
 		
 		vm.pageCount = function() {
+//			console.log("pageCount", Math.ceil(vm.activityList.length / vm.activityListPerPage) - 1);
 			return Math.ceil(vm.activityList.length / vm.activityListPerPage) - 1;
 		};
 		

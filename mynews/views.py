@@ -172,7 +172,6 @@ def detail(request, news_id):
 def login_view(request):
     print("login_view call")
     if request.method == 'POST':
-        print(22222222)
         username = request.POST.get('username', False)
         password = request.POST.get('password', False)
         user = authenticate(username=username, password=password)
@@ -191,6 +190,7 @@ def login_view(request):
             context = {'message': message}
             return render(request, 'mynews/login.html', context)
     else:
+        print(22222222)
         return render(request, 'mynews/login.html')
 
 
