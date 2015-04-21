@@ -83,5 +83,5 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 
-#Customizing your project��s templates
+#Customizing your projects templates
 TEMPLATE_DIRS = [os.path.join(BASE_DIR, 'templates')]

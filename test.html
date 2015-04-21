@@ -1,104 +1,100 @@
 <style>
-.outer {
-	display: table;
-	width: 50%;
-	height: 100%;
+.border {
+	border: 1px solid green;
 }
 
-.inner {
-	display: table-cell;
-	vertical-align: middle;
-	text-align: right;
-	border: 1px solid;
+.container {
+	overflow: hidden;
 }
 
-input:enabled {
-	background-color: white;
+#a1 {
+	height: 300px;
 }
 
-input:disabled {
-	background-color: gray;
+#a2 {
+	height: 300px;
 }
 
-/* div p { */
-/* 	color: red; */
-/* } */
-
-/* div div { */
-/*   color: blue; */
-/* } */
-/* div div .hi { */
-/*   color: gray; */
-/* } */
-
-/* .a .b{ */
-/* 	color: red; */
-/* } */
-
-.a, .b {
-color: red;
+#a3 {
+	height: 300px;
 }
 
-.c {
-	color: blue;
+#b {
+	height: 300px;
 }
 
-.d .e {
-	color: gray;
+#c {
+	display: none;
+	height: 300px;
+	
 }
 
-.f {
-	color: red;
-}
-
-.g {
-	color: gray;
-}
-
-/* .g .f { */
-/* 	color: blue; */
-/* } */
-
-.g {
-	.f{
-		color: b
+@media screen and (min-width: 768px) {
+	#c {
+		display: block;
 	}
 }
 
 </style>
 
-<div class="a">
-	in a
-	<header class="b">
-	in bbb
-		<h1 class="c">in cc</h1>
-	</header>
-	<p>test</p>
-	<div>
-	hi
-		<div class="a">
-		hi in div
-		</div>
-	</div>
-	<div class="d">
-		hello
-		<p class="e">hello in p</p>
-	</div>
-</div>
-	
-	
-	<div class="g">
-		what
-		<div class="f">
-			is it
-		</div>		
-	</div>
-------------------------------------------
-<!-- <h1 class="a b">a</h1> -->
-<!-- <h1 class="b">b</h1> -->
-<!-- <h1 class="c">c</h1> -->
-<!-- <h1 class="d">d</h1> -->
-<!-- <h1 class="e">e</h1> -->
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Bootstrap 101 Template</title>
 
+    <!-- Bootstrap -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
+
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+	<div class="container">
+		<div class="row">
+			<div class="col-md-8 border" id="a">
+				<div class="row">
+					<section class="col-sm-6 col-xs-12 border" id="a1">
+						A1
+					</section>
+					<section class="col-sm-6 col-xs-12 border" id="a2">
+						A2
+					</section>
+					<div class="col-xs-12 border" id="a3">
+						A3
+					</div>
+				</div>
+			</div>
+			<div class="col-md-4 col-border">
+				<div class="row">
+					<div class="col-xs-12 border" id="b">
+						B
+					</div>
+					<div class="col-xs-12 border" id="c">
+						C
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>    
+
+
+
+
+
+
+
+    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+    <!-- Include all compiled plugins (below), or include individual files as needed -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
+  </body>
+</html>
 
 
